@@ -59,10 +59,10 @@ public class Simulator {
         List<Sensor> fireSensors = new ArrayList<>();
         for (Sensor sensor : this.sensors) {
             double distance = Math.pow((fireLat - sensor.getLocation().getLatitude()), 2) + Math.pow((fireLong - sensor.getLocation().getLongitude()), 2);
-            double sensorRange = Math.pow(sensor.getRange(), 2);
+            double sensorRadius = Math.pow(sensor.getRadius(), 2);
             // Calcul de l'intensité en fonction de la distance entre le centre du feu et le centre du sensor
-            int intensity = (int)Math.round(distance * 100 / sensorRange);
-            if (distance < sensorRange) {
+            int intensity = (int)Math.round(distance * 100 / sensorRadius);
+            if (distance < sensorRadius) {
                 sensor.incrementIntensite(intensity);
                 fireSensors.add(sensor);
             }

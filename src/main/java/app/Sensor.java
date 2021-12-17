@@ -5,15 +5,15 @@ public class Sensor {
 
     private final String id;
     private final Coord location;
-    private final double range = 0.01929018172830706 / 2;
+    private final double radius = 0.01929018172830706 / 2;
     private int intensity;
 
     public String getId() {
         return id;
     }
 
-    public double getRange() {
-        return range;
+    public double getRadius() {
+        return radius;
     }
 
     public Coord getLocation() { return this.location; }
@@ -21,7 +21,6 @@ public class Sensor {
     public int getIntensity() {
         return intensity;
     }
-
 
     public Sensor(String id, Coord location, int intensity) {
         this.id = id;
@@ -56,7 +55,16 @@ public class Sensor {
                 "id='" + id + '\'' +
                 ", location='(" + this.location + ")'" +
                 ", intensite='" + intensity + "\'" +
-                ", range='" + range + "\'" +
+                ", radius='" + radius + "\'" +
                 "}\n";
+    }
+
+    public String toJSON() {
+        return "{\"id\":" + this.id +
+                ", \"latitude\":" + this.location.getLatitude() +
+                ", \"longitude\":" + this.location.getLongitude() +
+                ", \"radius\":" + this.radius +
+                ", \"intensity\":" + this.intensity +
+                "}";
     }
 }

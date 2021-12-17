@@ -29,7 +29,9 @@ public class Main {
         final Gson gson = new Gson();
         API example = new API();
         String response = example.get("http://localhost:3000");
-        response = example.post("http://localhost:3000/api/sensors/", gson.toJson(sensorToPost));
+        System.out.println(gson.toJson(sensorToPost));
+        System.out.println(sensorToPost.toJSON());
+        response = example.post("http://localhost:3000/api/sensors/", sensorToPost.toJSON());
         System.out.println(response);
 
         try {
