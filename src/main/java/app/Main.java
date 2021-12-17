@@ -4,6 +4,7 @@ import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,13 +26,12 @@ public class Main {
         System.out.println("==================================");
 
         Sensor sensorToPost = new Sensor("0", new Coord(45.0, 4.0), 50);
+        Fire fireToPost = new Fire(0, new Coord(45.0, 4.0), 4);
 
         final Gson gson = new Gson();
         API example = new API();
         String response = example.get("http://localhost:3000");
-        System.out.println(gson.toJson(sensorToPost));
-        System.out.println(sensorToPost.toJSON());
-        response = example.post("http://localhost:3000/api/sensors/", sensorToPost.toJSON());
+        response = example.post("http://localhost:3000/api/emergencies/", fireToPost.toJSON());
         System.out.println(response);
 
         try {
