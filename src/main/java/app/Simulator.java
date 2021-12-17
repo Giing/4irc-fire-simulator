@@ -37,11 +37,15 @@ public class Simulator {
         return latitude_step;
     }
 
+    public List<Sensor> getSensors() {
+        return this.sensors;
+    }
+
     public Simulator initializeSimulation() {
         int id = 0;
         for (double i = 0; i < 10; i++) {
             for (double j = 0; j < 6; j++) {
-                this.sensors.add(new Sensor(String.valueOf(id), (j * this.latitude_step) + this.latitude_min, (i * this.longitude_step) + this.longitude_min, 0));
+                this.sensors.add(new Sensor(String.valueOf(id), new Coord((j * this.latitude_step) + this.latitude_min, (i * this.longitude_step) + this.longitude_min), 0));
                 id++;
             }
         }
@@ -54,7 +58,7 @@ public class Simulator {
         double fireLong = this.longitude_min + Math.random() * (this.longitude_max - this.longitude_min);
         List<Sensor> fireSensors = new ArrayList<>();
         for (Sensor sensor : this.sensors) {
-            double distance = Math.pow((fireLat - sensor.getLatitude()), 2) + Math.pow((fireLong - sensor.getLongitude()), 2);
+            double distance = Math.pow((fireLat - sensor.getLocation().getLatitude()), 2) + Math.pow((fireLong - sensor.getLocation().getLongitude()), 2);
             double sensorRange = Math.pow(sensor.getRange(), 2);
             // Calcul de l'intensité en fonction de la distance entre le centre du feu et le centre du sensor
             int intensity = (int)Math.round(distance * 100 / sensorRange);
@@ -63,7 +67,7 @@ public class Simulator {
                 fireSensors.add(sensor);
             }
         }
-        Fire fire = new Fire(this.fires.size(), fireLong, fireLat, fireSensors);
+        Fire fire = new Fire(this.fires.size(), new Coord(fireLat, fireLong), fireSensors);
         if (canDeclareFire(fire))
             this.fires.add(fire);
         return fire;

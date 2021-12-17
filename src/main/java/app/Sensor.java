@@ -4,35 +4,28 @@ public class Sensor {
 
 
     private final String id;
-    private final double latitude;
-    private final double longitude;
+    private final Coord location;
     private final double range = 0.01929018172830706 / 2;
     private int intensity;
 
     public String getId() {
         return id;
     }
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
 
     public double getRange() {
         return range;
     }
+
+    public Coord getLocation() { return this.location; }
 
     public int getIntensity() {
         return intensity;
     }
 
 
-    public Sensor(String id, double latitude, double longitude, int intensity) {
+    public Sensor(String id, Coord location, int intensity) {
         this.id = id;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.location = location;
         this.intensity = intensity;
     }
 
@@ -61,7 +54,7 @@ public class Sensor {
     public String toString() {
         return "Sensor{" +
                 "id='" + id + '\'' +
-                ", location='(" + String.valueOf(latitude) + ", " + String.valueOf(longitude) + ")'" +
+                ", location='(" + this.location + ")'" +
                 ", intensite='" + intensity + "\'" +
                 ", range='" + range + "\'" +
                 "}\n";

@@ -1,67 +1,79 @@
 package app;
 
+import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import com.google.gson.Gson;
+import org.json.JSONArray;
+import org.json.JSONException;
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter.Listener;
+
 public class Main {
 
-    static Timer timer = new Timer();
-    public Simulator sim;
-
-    static class FireGenerator extends TimerTask {
-        private final int fireFrequency = 1;
-        private Simulator sim;
-
-        public FireGenerator(Simulator sim) {
-            this.sim = sim;
-        }
-
-        @Override
-        public void run() {
-            /*while(true) {
-                int delay = this.fireFrequency * 60000 + new Random().nextInt(5) * 60000;
-                try {
-                    wait(delay);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }*/
-        }
-    }
-
-    public static void main(String args[]) {
+    public static void main(String args[]) throws Exception {
         System.out.println("==================================");
         System.out.println("|| Bienvenue dans le simulateur ||");
         System.out.println("==================================");
 
-        Simulator sim = new Simulator();
-        sim.initializeSimulation();
-        try {
-            // open websocket
-            final WebsocketClientEndpoint clientEndPoint = new WebsocketClientEndpoint(new URI("ws://localhost:3000"));
+        Sensor sensorToPost = new Sensor("0", new Coord(45.0, 4.0), 50);
 
-            // add listener
-            clientEndPoint.addMessageHandler(new WebsocketClientEndpoint.MessageHandler() {
-                public void handleMessage(String message) {
-                    System.out.println(message);
+        final Gson gson = new Gson();
+        API example = new API();
+        String response = example.get("http://localhost:3000");
+        response = example.post("http://localhost:3000/api/sensors/", gson.toJson(sensorToPost));
+        System.out.println(response);
+
+        try {
+            Simulator sim = new Simulator();
+            sim.initializeSimulation();
+
+            String json = gson.toJson(sim.getSensors());
+            System.out.println(json);
+
+            /***
+             * Requête API
+             */
+
+
+
+
+            /***
+             * Websocket
+             */
+            IO.Options options = IO.Options.builder()
+                    .setQuery("token=4739f58f-5e35-4235-8ac5-4fdba549d641")
+                    .build();
+
+            Socket socket = IO.socket("ws://localhost:3000", options);
+
+            socket.on("onUpdateSensors", new Listener() {
+                @Override
+                public void call(Object... args) {
+
+                    JSONArray content = (JSONArray)args[0];
+                    try {
+                        Sensor sensor = gson.fromJson(content.get(0).toString(), Sensor.class);
+                        System.out.println(sensor);
+                    } catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                 }
             });
 
-            // send message to websocket
-            clientEndPoint.sendMessage("{'event':'addChannel','channel':'ok_btccny_ticker'}");
-
-            // wait 5 seconds for messages from websocket
-            Thread.sleep(5000);
-
-        } catch (InterruptedException ex) {
-            System.err.println("InterruptedException exception: " + ex.getMessage());
-        } catch (URISyntaxException ex) {
-            System.err.println("URISyntaxException exception: " + ex.getMessage());
+            socket.connect();
+        } catch (Exception e) {
+            //TODO: handle exception
+            throw new Exception("Failed to connect to websocket");
         }
-        //new FireGenerator(sim).run();
-
     }
 }
