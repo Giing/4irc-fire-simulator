@@ -1,22 +1,20 @@
 package app;
 
-import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import model.Coord;
+import model.Fire;
+import model.Sensor;
+import model.SensorDeserializer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter.Listener;
+import socket.Events;
+import socket.WebSocket;
+
+import static java.lang.Thread.sleep;
 
 public class Main {
 
@@ -28,18 +26,18 @@ public class Main {
         Sensor sensorToPost = new Sensor("0", new Coord(45.0, 4.0), 50);
         Fire fireToPost = new Fire(0, new Coord(45.0, 4.0), 4);
 
-        final Gson gson = new Gson();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Sensor.class, new SensorDeserializer());
+        final Gson gson = gsonBuilder.create();
         API example = new API();
         String response = example.get("http://localhost:3000");
-        response = example.post("http://localhost:3000/api/emergencies/", fireToPost.toJSON());
-        System.out.println(response);
 
         try {
             Simulator sim = new Simulator();
             sim.initializeSimulation();
 
             String json = gson.toJson(sim.getSensors());
-            System.out.println(json);
+            //System.out.println(json);
 
             /***
              * Requête API
@@ -51,7 +49,10 @@ public class Main {
             /***
              * Websocket
              */
-            IO.Options options = IO.Options.builder()
+            Manager manager = new Manager();
+            WebSocket ws = new WebSocket("ws://localhost:3000", "4739f58f-5e35-4235-8ac5-4fdba549d641");
+            ws.subscribe(manager , Events.SENSORS.getEvent());
+            /*IO.Options options = IO.Options.builder()
                     .setQuery("token=4739f58f-5e35-4235-8ac5-4fdba549d641")
                     .build();
 
@@ -60,11 +61,13 @@ public class Main {
             socket.on("onUpdateSensors", new Listener() {
                 @Override
                 public void call(Object... args) {
+                    System.out.println("TEST");
 
                     JSONArray content = (JSONArray)args[0];
                     try {
                         Sensor sensor = gson.fromJson(content.get(0).toString(), Sensor.class);
-                        System.out.println(sensor);
+                        System.out.println("Raw content " + content.get(0).toString());
+                        System.out.println("Updated sensor : " + sensor.toJSON());
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -73,9 +76,13 @@ public class Main {
             });
 
             socket.connect();
+            */
         } catch (Exception e) {
             //TODO: handle exception
             throw new Exception("Failed to connect to websocket");
         }
+        sleep(500);
+        response = example.post("http://localhost:3000/api/sensors/", sensorToPost.toJSON());
+        System.out.println(response);
     }
 }

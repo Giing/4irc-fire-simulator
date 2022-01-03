@@ -1,5 +1,8 @@
 package app;
 
+import model.Coord;
+import model.Fire;
+import model.Sensor;
 import org.junit.Assert;
 import org.junit.Test;
 import java.util.*;

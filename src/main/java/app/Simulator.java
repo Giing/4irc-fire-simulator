@@ -1,5 +1,9 @@
 package app;
 
+import model.Coord;
+import model.Fire;
+import model.Sensor;
+
 import java.util.*;
 
 public class Simulator {
@@ -86,7 +90,7 @@ public class Simulator {
     public String toString() {
         String str = "========Simulator========\n";
         for(Sensor sensor : this.sensors)
-            str += sensor.toString() + ",\n";
+            str += sensor.toJSON() + ",\n";
         str += "===================\n";
         return str;
     }

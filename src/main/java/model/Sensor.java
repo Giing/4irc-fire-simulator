@@ -1,4 +1,4 @@
-package app;
+package model;
 
 public class Sensor {
 
@@ -25,6 +25,12 @@ public class Sensor {
     public Sensor(String id, Coord location, int intensity) {
         this.id = id;
         this.location = location;
+        this.intensity = intensity;
+    }
+
+    public Sensor(String id, double longitude, double latitude, int intensity) {
+        this.id = id;
+        this.location = new Coord(longitude, latitude);
         this.intensity = intensity;
     }
 
