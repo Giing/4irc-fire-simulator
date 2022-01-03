@@ -1,12 +1,24 @@
 package model;
 
-public class Sensor {
+import java.lang.reflect.Type;
+
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+
+import json.Serialiazable;
+
+public class Sensor extends Serialiazable<JsonDeserializer> {
 
 
     private final String id;
     private final Coord location;
     private final double radius = 0.01929018172830706 / 2;
     private int intensity;
+
+    public static JsonDeserializer<Sensor> jsonDeserializer = new SensorDeserializer();
 
     public String getId() {
         return id;
@@ -72,5 +84,10 @@ public class Sensor {
                 ", \"radius\":" + this.radius +
                 ", \"intensity\":" + this.intensity +
                 "}";
+    }
+
+    @Override
+    public JsonDeserializer getJsonDeserializer() {
+        return new SensorDeserializer();
     }
 }

@@ -82,7 +82,7 @@ public class Main {
             throw new Exception("Failed to connect to websocket");
         }
         sleep(500);
-        response = example.post("http://localhost:3000/api/sensors/", sensorToPost.toJSON());
+        response = example.post("/sensors/", sensorToPost.toJSON());
         System.out.println(response);
     }
 }

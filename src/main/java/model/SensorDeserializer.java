@@ -9,14 +9,14 @@ public class SensorDeserializer implements JsonDeserializer<Sensor> {
         JsonObject jsonObject = json.getAsJsonObject();
 
         Coord coord = new Coord(
-                jsonObject.get("longitude").getAsDouble(),
-                jsonObject.get("latitude").getAsDouble()
+            jsonObject.get("longitude").getAsDouble(),
+            jsonObject.get("latitude").getAsDouble()
         );
 
         return new Sensor(
-                jsonObject.get("id").getAsString(),
-                coord,
-                jsonObject.get("intensity").getAsInt()
+            jsonObject.get("id").getAsString(),
+            coord,
+            jsonObject.get("intensity").getAsInt()
         );
     }
 }

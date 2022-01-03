@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter.Listener;
+import json.Json;
 
 import java.lang.reflect.Type;
 import java.net.URISyntaxException;
@@ -61,6 +62,9 @@ public class WebSocket {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Sensor.class, new SensorDeserializer());
         final Gson gson = gsonBuilder.create();
+
+        Json<Sensor> sensorJson = new Json<>(Sensor.class);
+
         socket.on(event, new Listener() {
             @Override
             public void call(Object... args) {
@@ -69,16 +73,17 @@ public class WebSocket {
 
                 switch(event) {
                     case "onUpdateSensors":
-                        Type typeSensors = new TypeToken<List<Sensor>>(){}.getType();
-                        subscriber.onUpdateSensors(gson.fromJson(content.toString(), typeSensors));
+                        // Type typeSensors = new TypeToken<List<Sensor>>(){}.getType();
+                        // subscriber.onUpdateSensors(gson.fromJson(content.toString(), typeSensors));
+                        subscriber.onUpdateSensors(sensorJson.fromJson(content));
                         break;
                     case "onUpdateEmergencies":
                         Type typeEmergencies = new TypeToken<List<Fire>>(){}.getType();
-                        subscriber.onUpdateSensors(gson.fromJson(content.toString(), typeEmergencies));
+                        subscriber.onUpdateEmergencies(gson.fromJson(content.toString(), typeEmergencies));
                         break;
                     case "onUpdateStations":
                         Type typeStations = new TypeToken<List<Station>>(){}.getType();
-                        subscriber.onUpdateSensors(gson.fromJson(content.toString(), typeStations));
+                        subscriber.onUpdateStations(gson.fromJson(content.toString(), typeStations));
                         break;
                 }
             }
