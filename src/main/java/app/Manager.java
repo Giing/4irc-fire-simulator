@@ -10,6 +10,7 @@ public class Manager extends Subscriber {
     @Override
     public void onUpdateSensors(ArrayList<Sensor> sensors) {
         //super.onUpdateSensors(sensors);
+        System.out.println("Update des sensors");
         System.out.println(sensors);
     }
 }

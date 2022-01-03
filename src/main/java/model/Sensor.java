@@ -7,6 +7,7 @@ public class Sensor {
     private final Coord location;
     private final double radius = 0.01929018172830706 / 2;
     private int intensity;
+    private String emergencyId;
 
     public String getId() {
         return id;
@@ -25,13 +26,22 @@ public class Sensor {
     public Sensor(String id, Coord location, int intensity) {
         this.id = id;
         this.location = location;
+        this.emergencyId = null;
         this.intensity = intensity;
     }
 
     public Sensor(String id, double longitude, double latitude, int intensity) {
         this.id = id;
         this.location = new Coord(longitude, latitude);
+        this.emergencyId = null;
         this.intensity = intensity;
+    }
+
+    public Sensor(String id, double longitude, double latitude, int intensity, String emergencyId) {
+        this.id = id;
+        this.location = new Coord(longitude, latitude);
+        this.intensity = intensity;
+        this.emergencyId = emergencyId;
     }
 
     public void incrementIntensite(int inc) {
@@ -57,7 +67,7 @@ public class Sensor {
 
     @Override
     public String toString() {
-        return "Sensor{" +
+        return "{" +
                 "id='" + id + '\'' +
                 ", location='(" + this.location + ")'" +
                 ", intensite='" + intensity + "\'" +
@@ -70,6 +80,7 @@ public class Sensor {
                 ", \"latitude\":" + this.location.getLatitude() +
                 ", \"longitude\":" + this.location.getLongitude() +
                 ", \"radius\":" + this.radius +
+                ", \"emergencyId\":" + this.emergencyId +
                 ", \"intensity\":" + this.intensity +
                 "}";
     }

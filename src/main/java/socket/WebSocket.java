@@ -74,11 +74,11 @@ public class WebSocket {
                         break;
                     case "onUpdateEmergencies":
                         Type typeEmergencies = new TypeToken<List<Fire>>(){}.getType();
-                        subscriber.onUpdateSensors(gson.fromJson(content.toString(), typeEmergencies));
+                        subscriber.onUpdateEmergencies(gson.fromJson(content.toString(), typeEmergencies));
                         break;
                     case "onUpdateStations":
                         Type typeStations = new TypeToken<List<Station>>(){}.getType();
-                        subscriber.onUpdateSensors(gson.fromJson(content.toString(), typeStations));
+                        subscriber.onUpdateStations(gson.fromJson(content.toString(), typeStations));
                         break;
                 }
             }

@@ -20,7 +20,7 @@ public class Fire {
         boolean res = false;
         for (Sensor s : this.sensors) {
             if(s == sensor)
-                res = true;
+                res = true; break;
         }
         return res;
     }

@@ -72,16 +72,21 @@ public class Simulator {
             }
         }
         Fire fire = new Fire(this.fires.size(), new Coord(fireLat, fireLong), fireSensors);
-        if (canDeclareFire(fire))
+        if (canDeclareFire(fire)) {
+            System.out.println("Nouveau feu créé : " + fire.toJSON());
             this.fires.add(fire);
-        return fire;
+            return fire;
+        } else
+            return null;
     }
 
     public boolean canDeclareFire(Fire fire) {
         boolean res = true;
         for(Sensor s : fire.getSensors()) {
-            if(fire.isThereSensorInFire(s))
-                res = false;
+            for(Fire f : this.fires) {
+                if(f.isThereSensorInFire(s))
+                    res = false;
+            }
         }
         return res;
     }
