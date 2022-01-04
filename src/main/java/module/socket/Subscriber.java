@@ -3,7 +3,6 @@ package module.socket;
 import java.util.ArrayList;
 
 import module.model.Emergency;
-import module.model.Fire;
 import module.model.Sensor;
 import module.model.Station;
 
