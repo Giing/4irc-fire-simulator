@@ -1,10 +1,10 @@
 package app;
 
-import model.Coord;
-import model.Fire;
-import model.Sensor;
-
 import java.util.*;
+
+import module.model.Coord;
+import module.model.Fire;
+import module.model.Sensor;
 
 public class Simulator {
 

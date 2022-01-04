@@ -1,10 +1,12 @@
 package app;
 
-import model.Coord;
-import model.Fire;
-import model.Sensor;
 import org.junit.Assert;
 import org.junit.Test;
+
+import module.model.Coord;
+import module.model.Fire;
+import module.model.Sensor;
+
 import java.util.*;
 
 public class FireTest {

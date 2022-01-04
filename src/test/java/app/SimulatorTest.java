@@ -1,8 +1,9 @@
 package app;
 
-import model.Fire;
 import org.junit.Assert;
 import org.junit.Test;
+
+import module.model.Fire;
 
 public class SimulatorTest {
 
