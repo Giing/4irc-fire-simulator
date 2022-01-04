@@ -7,6 +7,7 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter.Listener;
 import module.json.Json;
+import module.json.JsonMapper;
 import module.model.Emergency;
 import module.model.Sensor;
 import module.model.SensorAdapter;
@@ -59,11 +60,7 @@ public class WebSocket {
     }
 
     private void subscribeToEvent(Subscriber subscriber, String event) {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(Sensor.class, new SensorAdapter());
-        final Gson gson = gsonBuilder.create();
-
-        Json<Sensor> sensorJson = new Json<>(Sensor.class);
+        JsonMapper mapper = JsonMapper.getInstance();
 
         socket.on(event, new Listener() {
             @Override
@@ -74,16 +71,15 @@ public class WebSocket {
 
                 switch(event) {
                     case "onUpdateSensors":
-                        subscriber.onUpdateSensors(sensorJson.fromJson(content));
+                        subscriber.onUpdateSensors(mapper.sensor.fromJson(content));
                         break;
                     case "onUpdateEmergencies":
-                        Type typeEmergencies = new TypeToken<List<Emergency>>(){}.getType();
-                        subscriber.onUpdateEmergencies(gson.fromJson(content.toString(), typeEmergencies));
+                        subscriber.onUpdateEmergencies(mapper.emergency.fromJson(content));
                         break;
-                    case "onUpdateStations":
-                        Type typeStations = new TypeToken<List<Station>>(){}.getType();
-                        subscriber.onUpdateStations(gson.fromJson(content.toString(), typeStations));
-                        break;
+                    // case "onUpdateStations":
+                    //     Type typeStations = new TypeToken<List<Station>>(){}.getType();
+                    //     subscriber.onUpdateStations(gson.fromJson(content.toString(), typeStations));
+                    //     break;
                 }
             }
         });

@@ -2,11 +2,15 @@ package module.model;
 
 import java.util.List;
 
+import com.google.gson.JsonDeserializer;
+
 public class Emergency {
-    private final int id_fire;
+    private final String id_emergency;
     private final Coord location;
     private int intensity;
     private List<Sensor> sensors;
+
+    public static JsonDeserializer<Emergency> jsonAdapter = new EmergencyAdapter();
 
     public List<Sensor> getSensors() {
         return sensors;
@@ -16,7 +20,9 @@ public class Emergency {
         this.sensors = sensors;
     }
 
-    public int getId() { return this.id_fire; }
+    public String getId() { return this.id_emergency; }
+    public int getIntensity() { return this.intensity; }
+    public Coord getLocation() { return this.location; }
 
     public boolean isThereSensorInFire(Sensor sensor) {
         boolean res = false;
@@ -31,35 +37,54 @@ public class Emergency {
     @Override
     public String toString() {
         return "Fire{" +
-                "id_fire=" + id_fire +
+                "id_emergency=" + id_emergency +
                 ", location=" + this.location +
                 "), sensors=\n" + sensors +
                 '}';
     }
 
     public String toJSON() {
-        return "{\"id\":" + this.id_fire +
+        return "{\"id\":" + this.id_emergency +
                 ", \"latitude\":" + this.location.getLatitude() +
                 ", \"longitude\":" + this.location.getLongitude() +
                 ", \"intensity\":" + this.intensity +
                 "}";
     }
 
-    public Emergency(int id_fire, Coord location, List<Sensor> sensors, int intensity) {
-        this.id_fire = id_fire;
+    public Emergency(String id_emergency, Coord location, List<Sensor> sensors, int intensity) {
+        this.id_emergency = id_emergency;
         this.location = location;
         this.sensors = sensors;
         this.intensity = intensity;
     }
 
-    public Emergency(int id_fire, Coord location, List<Sensor> sensors) {
-        this.id_fire = id_fire;
+    public Emergency(String id_emergency, Coord location, List<Sensor> sensors) {
+        this.id_emergency = id_emergency;
         this.location = location;
         this.sensors = sensors;
     }
 
-    public Emergency(int id_fire, Coord location, int intensity) {
-        this.id_fire = id_fire;
+    public Emergency(String id_emergency, Coord location, int intensity) {
+        this.id_emergency = id_emergency;
+        this.location = location;
+        this.intensity = intensity;
+    }
+
+    public Emergency(int id_emergency, Coord location, List<Sensor> sensors, int intensity) {
+        this.id_emergency = String.valueOf(id_emergency);
+        this.location = location;
+        this.sensors = sensors;
+        this.intensity = intensity;
+    }
+
+    public Emergency(int id_emergency, Coord location, List<Sensor> sensors) {
+        this.id_emergency = String.valueOf(id_emergency);
+        this.location = location;
+        this.sensors = sensors;
+    }
+
+    public Emergency(int id_emergency, Coord location, int intensity) {
+        this.id_emergency = String.valueOf(id_emergency);
         this.location = location;
         this.intensity = intensity;
     }

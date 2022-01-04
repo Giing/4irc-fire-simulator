@@ -1,6 +1,6 @@
 package app;
 
-import module.API;
+import module.api.Http;
 import module.model.Emergency;
 import module.model.Sensor;
 import module.socket.Events;
@@ -16,7 +16,7 @@ public class Main {
         System.out.println("|| Bienvenue dans le simulateur ||");
         System.out.println("==================================");
 
-        API api = new API();
+        Http api = new Http();
         Simulator sim = new Simulator();
         sim.initializeSimulation();
         System.out.println(sim.getSensors());

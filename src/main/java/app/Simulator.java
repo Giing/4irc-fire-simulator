@@ -84,7 +84,7 @@ public class Simulator extends Subscriber{
             }
         }
 
-        Emergency emergency = new Emergency(this.emergencies.size(), new Coord(fireLat, fireLong), fireSensors);
+        Emergency emergency = new Emergency(this.emergencies.size() , new Coord(fireLat, fireLong), fireSensors);
         if (canDeclareEmergency(emergency)) {
             System.out.println("Nouveau feu créé : " + emergency.toJSON());
             for (Sensor s : emergency.getSensors())
