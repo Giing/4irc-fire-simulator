@@ -34,9 +34,7 @@ public class Main {
             Emergency emergency = sim.initEmergency();
             if (emergency != null) {
                 api.post("http://localhost:3000/api/emergencies/", emergency.toJSON());
-                for (Sensor s : emergency.getSensors()) {
-                    api.post("http://localhost:3000/api/sensors/", s.toJSON());
-                }
+                api.sensor.createOrUpdate( emergency.getSensors());
             }
             System.out.println("Attente de " + delayBetweenTwoEmergencies / 1000 + " secondes");
             sleep(delayBetweenTwoEmergencies);
