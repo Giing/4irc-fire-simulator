@@ -133,8 +133,8 @@ public class Simulator extends Subscriber{
             }
         }
         //super.onUpdateSensors(sensors);
-        System.out.println(this);
-        System.out.println("MàJ des sensors " + sensors.toString());
+        // System.out.println(this);
+        // System.out.println("MàJ des sensors " + sensors.toString());
     }
 
     @Override

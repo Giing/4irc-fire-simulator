@@ -27,8 +27,7 @@ public class SensorAdapter implements JsonDeserializer<Sensor>, JsonSerializer<S
         obj.addProperty("radius", src.getRadius());
         obj.addProperty("intensity", src.getIntensity());
         obj.addProperty("longitude", src.getLocation().getLongitude());
-        obj.addProperty("longitude", src.getLocation().getLatitude());
-        obj.addProperty("latitude", src.getRadius());
+        obj.addProperty("latitude", src.getLocation().getLatitude());
         return obj;
     }
 }

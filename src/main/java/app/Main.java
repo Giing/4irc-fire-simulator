@@ -12,6 +12,8 @@ import static java.lang.Thread.sleep;
 
 import java.util.Arrays;
 
+import managers.FireManager;
+
 public class Main {
 
     public static void main(String args[]) throws Exception {
@@ -30,6 +32,9 @@ public class Main {
         WebSocket ws = new WebSocket("ws://localhost:3000", "4739f58f-5e35-4235-8ac5-4fdba549d641");
         ws.subscribe(sim, Events.SENSORS.getEvent());
         ws.subscribe(sim, Events.EMERGENCIES.getEvent());
+
+        FireManager test = new FireManager();
+        ws.subscribe(test, Events.SENSORS.getEvent());
 
         // Boucle infinie de simulation
         while(true) {
