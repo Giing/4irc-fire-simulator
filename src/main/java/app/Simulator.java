@@ -1,5 +1,6 @@
 package app;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 import module.model.Coord;
@@ -134,5 +135,16 @@ public class Simulator extends Subscriber{
         //super.onUpdateSensors(sensors);
         System.out.println(this);
         System.out.println("MàJ des sensors " + sensors.toString());
+    }
+
+    @Override
+    public  void onUpdateEmergencies(ArrayList<Emergency> emergencies) {
+        for (Emergency em : this.emergencies) {
+            for (Emergency emergencyToUpdate : emergencies) {
+                if (em.equals(emergencyToUpdate)) {
+                    this.emergencies.set(this.emergencies.indexOf(em), emergencyToUpdate);
+                }
+            }
+        }
     }
 }

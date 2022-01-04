@@ -20,9 +20,11 @@ public class SimulatorTest {
 
         for (int i = 0; i < iteration; i++) {
             emergencyToTest = sim.initEmergency();
-            allFireHaveSensors = emergencyToTest.getSensors().size() > 0 && allFireHaveSensors;
-            if(emergencyToTest.getSensors().size() <= 0)
-                System.out.println(emergencyToTest);
+            if (emergencyToTest != null) {
+                allFireHaveSensors = emergencyToTest.getSensors().size() > 0 && allFireHaveSensors;
+                if(emergencyToTest.getSensors().size() <= 0)
+                    System.out.println(emergencyToTest);
+            }
         }
         Assert.assertTrue(allFireHaveSensors);
     }
