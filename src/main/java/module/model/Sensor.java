@@ -15,6 +15,7 @@ public class Sensor {
     private final Coord location;
     private final double radius = 0.01929018172830706 / 2;
     private int intensity;
+    private String emergencyId;
 
     public static JsonDeserializer<Sensor> jsonAdapter = new SensorAdapter();
 
@@ -32,16 +33,27 @@ public class Sensor {
         return intensity;
     }
 
+    public void setEmergencyId(String id) { this.emergencyId = id; }
+
     public Sensor(String id, Coord location, int intensity) {
         this.id = id;
         this.location = location;
+        this.emergencyId = null;
         this.intensity = intensity;
     }
 
     public Sensor(String id, double longitude, double latitude, int intensity) {
         this.id = id;
         this.location = new Coord(longitude, latitude);
+        this.emergencyId = null;
         this.intensity = intensity;
+    }
+
+    public Sensor(String id, double longitude, double latitude, int intensity, String emergencyId) {
+        this.id = id;
+        this.location = new Coord(longitude, latitude);
+        this.intensity = intensity;
+        this.emergencyId = emergencyId;
     }
 
     public void incrementIntensite(int inc) {
@@ -67,9 +79,9 @@ public class Sensor {
 
     @Override
     public String toString() {
-        return "Sensor{" +
+        return "{" +
                 "id='" + id + '\'' +
-                ", location='(" + this.location + ")'" +
+                ", location='" + this.location + "'" +
                 ", intensite='" + intensity + "\'" +
                 ", radius='" + radius + "\'" +
                 "}\n";
@@ -80,6 +92,7 @@ public class Sensor {
                 ", \"latitude\":" + this.location.getLatitude() +
                 ", \"longitude\":" + this.location.getLongitude() +
                 ", \"radius\":" + this.radius +
+                ", \"emergencyId\":" + this.emergencyId +
                 ", \"intensity\":" + this.intensity +
                 "}";
     }

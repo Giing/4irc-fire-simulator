@@ -8,9 +8,4 @@ import java.util.ArrayList;
 
 public class Manager extends Subscriber {
 
-    @Override
-    public void onUpdateSensors(ArrayList<Sensor> sensors) {
-        JsonMapper mapper = JsonMapper.getInstance();
-        System.out.println(mapper.sensor.toJson(sensors));
-    }
 }

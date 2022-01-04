@@ -71,12 +71,13 @@ public class WebSocket {
 
                 JSONArray content = (JSONArray)args[0];
 
+
                 switch(event) {
                     case "onUpdateSensors":
                         subscriber.onUpdateSensors(sensorJson.fromJson(content));
                         break;
                     case "onUpdateEmergencies":
-                        Type typeEmergencies = new TypeToken<List<Fire>>(){}.getType();
+                        Type typeEmergencies = new TypeToken<List<Emergency>>(){}.getType();
                         subscriber.onUpdateEmergencies(gson.fromJson(content.toString(), typeEmergencies));
                         break;
                     case "onUpdateStations":

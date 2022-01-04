@@ -9,7 +9,7 @@ import module.model.Sensor;
 
 import java.util.*;
 
-public class FireTest {
+public class EmergencyTest {
 
     @Test
     public void TestIsThereSensorInFire() {
@@ -19,9 +19,9 @@ public class FireTest {
         Sensor s = new Sensor("1", new Coord(46.0, 4.0), 0);
         List<Sensor> sensors = new ArrayList<>();
         sensors.add(sensor);
-        Fire fire = new Fire(0, new Coord(4.0, 45.0), sensors);
-        Assert.assertTrue(fire.isThereSensorInFire(sensor));
-        Assert.assertFalse(fire.isThereSensorInFire(s));
+        Emergency emergency = new Emergency(0, new Coord(4.0, 45.0), sensors);
+        Assert.assertTrue(emergency.isThereSensorInFire(sensor));
+        Assert.assertFalse(emergency.isThereSensorInFire(s));
     }
 }
 

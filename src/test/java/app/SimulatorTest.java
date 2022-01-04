@@ -1,5 +1,6 @@
 package app;
 
+import model.Emergency;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -16,13 +17,13 @@ public class SimulatorTest {
 
         boolean allFireHaveSensors = true;
         int iteration = 1000;
-        Fire fireToTest;
+        Emergency emergencyToTest;
 
         for (int i = 0; i < iteration; i++) {
-            fireToTest = sim.initFire();
-            allFireHaveSensors = fireToTest.getSensors().size() > 0 && allFireHaveSensors;
-            if(fireToTest.getSensors().size() <= 0)
-                System.out.println(fireToTest);
+            emergencyToTest = sim.initEmergency();
+            allFireHaveSensors = emergencyToTest.getSensors().size() > 0 && allFireHaveSensors;
+            if(emergencyToTest.getSensors().size() <= 0)
+                System.out.println(emergencyToTest);
         }
         Assert.assertTrue(allFireHaveSensors);
     }
