@@ -16,7 +16,8 @@ public class SensorAdapter implements JsonDeserializer<Sensor>, JsonSerializer<S
         return new Sensor(
             jsonObject.get("id").getAsString(),
             coord,
-            jsonObject.get("intensity").getAsInt()
+            jsonObject.get("intensity").getAsInt(),
+            jsonObject.get("emergencyId").getAsString()
         );
     }
 
@@ -24,6 +25,7 @@ public class SensorAdapter implements JsonDeserializer<Sensor>, JsonSerializer<S
     public JsonElement serialize(Sensor src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject obj = new JsonObject();
         obj.addProperty("id", src.getId());
+        obj.addProperty("emergencyId", src.getEmergencyId());
         obj.addProperty("radius", src.getRadius());
         obj.addProperty("intensity", src.getIntensity());
         obj.addProperty("longitude", src.getLocation().getLongitude());
