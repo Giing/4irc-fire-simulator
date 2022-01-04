@@ -42,13 +42,13 @@ public class Json<T> {
         }
     }
 
-    public ArrayList<T> fromJson(JSONArray content) {
+    public List<T> fromJson(JSONArray content) {
         Gson gson = this.GsonBuilder.create();
         Type type = TypeToken.getParameterized(List.class, this.generic).getType();
         return gson.fromJson(content.toString(), type);
     }
 
-    public String toJson(ArrayList<T> serializable) {
+    public String toJson(List<T> serializable) {
         Gson gson = this.GsonBuilder.create();
         return gson.toJson(serializable);
     }

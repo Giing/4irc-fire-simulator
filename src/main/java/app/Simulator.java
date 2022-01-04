@@ -123,7 +123,7 @@ public class Simulator extends Subscriber{
     }
 
     @Override
-    public void onUpdateSensors(ArrayList<Sensor> sensors) {
+    public void onUpdateSensors(List<Sensor> sensors) {
         for (Sensor sensor : this.sensors) {
             for (Sensor s : sensors) {
                 if (s.equals(sensor)) {

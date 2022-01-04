@@ -1,9 +1,11 @@
 package module.api;
 
+import module.api.services.EmergencyService;
 import module.api.services.SensorService;
 
 public class Api {
     public SensorService sensor;
+    public EmergencyService emergency;
 
     /** Instance unique non préinitialisée */
     private static Api INSTANCE = null;
@@ -13,6 +15,7 @@ public class Api {
     private Api()
     {
         this.sensor = new SensorService(this.defaultClient);
+        this.emergency = new EmergencyService(this.defaultClient);
     }
      
     /** Point d'accès pour l'instance unique du singleton */

@@ -1,6 +1,6 @@
 package module.api.services;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import module.api.Http;
 import module.json.JsonMapper;
@@ -14,10 +14,10 @@ public class ApiService {
         this.mapper = JsonMapper.getInstance();
     }
 
-    public ArrayList getAll() {
+    public List getAll() {
         return null;
     }
-    public ArrayList createOrUpdate(ArrayList toCreateOrUpdate) {
+    public List createOrUpdate(List toCreateOrUpdate) {
         return null;
     }
 }

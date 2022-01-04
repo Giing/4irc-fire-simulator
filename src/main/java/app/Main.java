@@ -10,6 +10,8 @@ import module.socket.WebSocket;
 
 import static java.lang.Thread.sleep;
 
+import java.util.Arrays;
+
 public class Main {
 
     public static void main(String args[]) throws Exception {
@@ -33,8 +35,8 @@ public class Main {
             int delayBetweenTwoEmergencies = 30000 + (int)(Math.random() * ((45000 - 30000) + 1));
             Emergency emergency = sim.initEmergency();
             if (emergency != null) {
-                api.post("http://localhost:3000/api/emergencies/", emergency.toJSON());
-                api.sensor.createOrUpdate( emergency.getSensors());
+                api.emergency.createOrUpdate(Arrays.asList(emergency));
+                api.sensor.createOrUpdate(emergency.getSensors());
             }
             System.out.println("Attente de " + delayBetweenTwoEmergencies / 1000 + " secondes");
             sleep(delayBetweenTwoEmergencies);

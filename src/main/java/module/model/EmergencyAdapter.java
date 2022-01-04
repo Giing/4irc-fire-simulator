@@ -16,7 +16,7 @@ public class EmergencyAdapter implements JsonDeserializer<Emergency>, JsonSerial
         );
 
         return new Emergency(
-            jsonObject.get("id_emergency").getAsString(),
+            jsonObject.get("id").getAsString(),
             coord,
             new ArrayList<Sensor>()
         );
@@ -28,7 +28,7 @@ public class EmergencyAdapter implements JsonDeserializer<Emergency>, JsonSerial
         obj.addProperty("id", src.getId());
         obj.addProperty("intensity", src.getIntensity());
         obj.addProperty("longitude", src.getLocation().getLongitude());
-        obj.addProperty("longitude", src.getLocation().getLatitude());
+        obj.addProperty("latitude", src.getLocation().getLatitude());
         return obj;
     }
 }
