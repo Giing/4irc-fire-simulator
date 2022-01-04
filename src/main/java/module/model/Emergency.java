@@ -92,8 +92,8 @@ public class Emergency {
     @Override
     public boolean equals(Object obj) {
         boolean res = false;
-        if (obj instanceof Sensor) {
-            Sensor other = (Sensor) obj;
+        if (obj instanceof Emergency) {
+            Emergency other = (Emergency) obj;
             res = this.id_emergency.equals(other.getId());
         }
         return res;

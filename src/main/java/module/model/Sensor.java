@@ -15,6 +15,11 @@ public class Sensor {
     private final Coord location;
     private final double radius = 0.01929018172830706 / 2;
     private int intensity;
+
+    public String getEmergencyId() {
+        return emergencyId;
+    }
+
     private String emergencyId;
 
     public static JsonDeserializer<Sensor> jsonAdapter = new SensorAdapter();
@@ -52,6 +57,13 @@ public class Sensor {
     public Sensor(String id, double longitude, double latitude, int intensity, String emergencyId) {
         this.id = id;
         this.location = new Coord(longitude, latitude);
+        this.intensity = intensity;
+        this.emergencyId = emergencyId;
+    }
+
+    public Sensor(String id, Coord coord, int intensity, String emergencyId) {
+        this.id = id;
+        this.location = coord;
         this.intensity = intensity;
         this.emergencyId = emergencyId;
     }
