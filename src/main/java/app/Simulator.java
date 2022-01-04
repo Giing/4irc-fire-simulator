@@ -138,7 +138,7 @@ public class Simulator extends Subscriber{
     }
 
     @Override
-    public  void onUpdateEmergencies(ArrayList<Emergency> emergencies) {
+    public  void onUpdateEmergencies(List<Emergency> emergencies) {
         for (Emergency em : this.emergencies) {
             for (Emergency emergencyToUpdate : emergencies) {
                 if (em.equals(emergencyToUpdate)) {
