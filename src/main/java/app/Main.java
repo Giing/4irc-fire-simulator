@@ -1,21 +1,11 @@
 package app;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import module.API;
-import module.model.Coord;
-import module.model.Fire;
+import module.model.Emergency;
 import module.model.Sensor;
-import module.model.SensorAdapter;
 import module.socket.Events;
 import module.socket.WebSocket;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import io.socket.client.IO;
-import io.socket.client.Socket;
-import io.socket.emitter.Emitter.Listener;
 
 import static java.lang.Thread.sleep;
 

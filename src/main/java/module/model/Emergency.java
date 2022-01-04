@@ -1,8 +1,6 @@
-package model;
+package module.model;
 
 import java.util.List;
-
-import module.model.Coord;
 
 public class Emergency {
     private final int id_fire;

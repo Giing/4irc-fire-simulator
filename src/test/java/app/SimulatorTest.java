@@ -1,10 +1,9 @@
 package app;
 
-import model.Emergency;
 import org.junit.Assert;
 import org.junit.Test;
 
-import module.model.Fire;
+import module.model.Emergency;
 
 public class SimulatorTest {
 

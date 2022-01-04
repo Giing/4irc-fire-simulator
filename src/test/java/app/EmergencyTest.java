@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import module.model.Coord;
-import module.model.Fire;
+import module.model.Emergency;
 import module.model.Sensor;
 
 import java.util.*;

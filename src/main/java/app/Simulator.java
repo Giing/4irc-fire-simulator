@@ -5,8 +5,9 @@ import java.util.*;
 import module.model.Coord;
 import module.model.Emergency;
 import module.model.Sensor;
+import module.socket.Subscriber;
 
-public class Simulator {
+public class Simulator extends Subscriber{
 
     private final double longitude_max    = 4.896831000000001;
     private final double latitude_min     = 45.723967;

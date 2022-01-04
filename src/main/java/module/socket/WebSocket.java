@@ -7,7 +7,7 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter.Listener;
 import module.json.Json;
-import module.model.Fire;
+import module.model.Emergency;
 import module.model.Sensor;
 import module.model.SensorAdapter;
 import module.model.Station;
