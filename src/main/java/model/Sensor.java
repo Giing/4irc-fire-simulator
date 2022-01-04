@@ -23,6 +23,8 @@ public class Sensor {
         return intensity;
     }
 
+    public void setEmergencyId(String id) { this.emergencyId = id; }
+
     public Sensor(String id, Coord location, int intensity) {
         this.id = id;
         this.location = location;
@@ -69,7 +71,7 @@ public class Sensor {
     public String toString() {
         return "{" +
                 "id='" + id + '\'' +
-                ", location='(" + this.location + ")'" +
+                ", location='" + this.location + "'" +
                 ", intensite='" + intensity + "\'" +
                 ", radius='" + radius + "\'" +
                 "}\n";

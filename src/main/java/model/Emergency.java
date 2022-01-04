@@ -2,7 +2,7 @@ package model;
 
 import java.util.List;
 
-public class Fire {
+public class Emergency {
     private final int id_fire;
     private final Coord location;
     private int intensity;
@@ -15,6 +15,8 @@ public class Fire {
     public void setSensors(List<Sensor> sensors) {
         this.sensors = sensors;
     }
+
+    public int getId() { return this.id_fire; }
 
     public boolean isThereSensorInFire(Sensor sensor) {
         boolean res = false;
@@ -43,20 +45,20 @@ public class Fire {
                 "}";
     }
 
-    public Fire(int id_fire, Coord location, List<Sensor> sensors, int intensity) {
+    public Emergency(int id_fire, Coord location, List<Sensor> sensors, int intensity) {
         this.id_fire = id_fire;
         this.location = location;
         this.sensors = sensors;
         this.intensity = intensity;
     }
 
-    public Fire(int id_fire, Coord location, List<Sensor> sensors) {
+    public Emergency(int id_fire, Coord location, List<Sensor> sensors) {
         this.id_fire = id_fire;
         this.location = location;
         this.sensors = sensors;
     }
 
-    public Fire(int id_fire, Coord location, int intensity) {
+    public Emergency(int id_fire, Coord location, int intensity) {
         this.id_fire = id_fire;
         this.location = location;
         this.intensity = intensity;

@@ -11,7 +11,7 @@ import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import model.Fire;
+import model.Emergency;
 import model.Sensor;
 import model.SensorDeserializer;
 import model.Station;
@@ -67,13 +67,14 @@ public class WebSocket {
 
                 JSONArray content = (JSONArray)args[0];
 
+
                 switch(event) {
                     case "onUpdateSensors":
                         Type typeSensors = new TypeToken<List<Sensor>>(){}.getType();
                         subscriber.onUpdateSensors(gson.fromJson(content.toString(), typeSensors));
                         break;
                     case "onUpdateEmergencies":
-                        Type typeEmergencies = new TypeToken<List<Fire>>(){}.getType();
+                        Type typeEmergencies = new TypeToken<List<Emergency>>(){}.getType();
                         subscriber.onUpdateEmergencies(gson.fromJson(content.toString(), typeEmergencies));
                         break;
                     case "onUpdateStations":

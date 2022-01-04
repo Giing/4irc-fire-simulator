@@ -1,1 +1,1 @@
-# 4irc-fire-simulator
+# 4irc-emergency-simulator
