@@ -10,6 +10,22 @@ public class Http {
     public static final String BASE_URL = "http://localhost:3000/api/";
     final OkHttpClient client = new OkHttpClient();
 
+    /** Instance unique non préinitialisée */
+    private static Http INSTANCE = null;
+
+    /** Constructeur privé */
+    Http()
+    {}
+     
+    /** Point d'accès pour l'instance unique du singleton */
+    public static synchronized Http getInstance()
+    {           
+        if (INSTANCE == null)
+        {   INSTANCE = new Http(); 
+        }
+        return INSTANCE;
+    }
+
     public String get(String url) throws IOException {
         Request request = new Request.Builder()
             .url(BASE_URL + url)
