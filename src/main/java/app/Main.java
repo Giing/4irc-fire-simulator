@@ -11,6 +11,7 @@ import module.socket.WebSocket;
 import static java.lang.Thread.sleep;
 
 import java.util.Arrays;
+import java.util.List;
 
 import managers.FireManager;
 
@@ -22,9 +23,13 @@ public class Main {
         System.out.println("==================================");
 
         Api api = Api.getInstance();
-        Simulator sim = new Simulator();
-        sim.initializeSimulation();
-        System.out.println(sim.getSensors());
+        // System.out.println(api.sensor.getAll());
+        List<Sensor> simulatorSensors = api.sensor.getAll();
+        System.out.println(simulatorSensors);
+        Simulator sim = new Simulator(simulatorSensors);
+        // System.out.println(sim.getSensors());
+        // sim.initializeSimulation();
+        // System.out.println(sim.getSensors());
 
         /***
          * Websocket

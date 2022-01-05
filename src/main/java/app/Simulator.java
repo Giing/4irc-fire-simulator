@@ -3,6 +3,7 @@ package app;
 import java.lang.reflect.Array;
 import java.util.*;
 
+import module.json.JsonMapper;
 import module.model.Coord;
 import module.model.Emergency;
 import module.model.Sensor;
@@ -18,6 +19,7 @@ public class Simulator extends Subscriber{
     private final double latitude_step    = 0.06 / 6.0;
     private List<Sensor> sensors = new ArrayList<>();
     private List<Emergency> emergencies = new ArrayList<>();
+    protected JsonMapper mapper = JsonMapper.getInstance();
 
     public double getLongitude_min() {
         return longitude_min;
@@ -47,7 +49,15 @@ public class Simulator extends Subscriber{
         return this.sensors;
     }
 
+    public Simulator(List<Sensor> sensors) {
+        this.sensors = sensors;
+    }
+
+    public Simulator(){}
+
+    @Deprecated
     public Simulator initializeSimulation() {
+
         int id = 0;
         for (double i = 0; i < 10; i++) {
             for (double j = 0; j < 6; j++) {
@@ -87,7 +97,7 @@ public class Simulator extends Subscriber{
 
         Emergency emergency = new Emergency(this.emergencies.size() , new Coord(fireLat, fireLong), fireSensors);
         if (canDeclareEmergency(emergency)) {
-            System.out.println("Nouveau feu créé : " + emergency.toJSON());
+            System.out.println("Nouveau feu créé : " + emergency.toJSON() + "\n" + emergency.getSensors());
             for (Sensor s : emergency.getSensors())
                 s.setEmergencyId(String.valueOf(emergency.getId()));
             this.emergencies.add(emergency);

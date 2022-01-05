@@ -9,16 +9,21 @@ public class SensorAdapter implements JsonDeserializer<Sensor>, JsonSerializer<S
         JsonObject jsonObject = json.getAsJsonObject();
 
         Coord coord = new Coord(
-            jsonObject.get("longitude").getAsDouble(),
-            jsonObject.get("latitude").getAsDouble()
+            jsonObject.get("latitude").getAsDouble(),
+            jsonObject.get("longitude").getAsDouble()
         );
 
-        return new Sensor(
-            jsonObject.get("id").getAsString(),
-            coord,
-            jsonObject.get("intensity").getAsInt(),
-            jsonObject.get("emergencyId").getAsString()
+        Sensor sensor = new Sensor(
+                jsonObject.get("id").getAsString(),
+                coord,
+                jsonObject.get("intensity").getAsInt()
         );
+
+        // Si il existe un emergencyId on l'ajoute à l'objet sensor
+        if (!jsonObject.get("emergencyId").isJsonNull())
+            sensor.setEmergencyId(jsonObject.get("emergencyId").toString());
+
+        return sensor;
     }
 
     @Override
