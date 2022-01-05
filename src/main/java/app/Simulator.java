@@ -18,6 +18,19 @@ public class Simulator extends Subscriber{
     private final double longitude_step   = 0.11 / 10.0;
     private final double latitude_step    = 0.06 / 6.0;
     private List<Sensor> sensors = new ArrayList<>();
+
+    public List<Emergency> getEmergencies() {
+        return emergencies;
+    }
+
+    public void addEmergency(Emergency em) {
+        this.emergencies.add(em);
+    }
+
+    public void setEmergencies(List<Emergency> emergencies) {
+        this.emergencies = emergencies;
+    }
+
     private List<Emergency> emergencies = new ArrayList<>();
     protected JsonMapper mapper = JsonMapper.getInstance();
 
@@ -108,6 +121,7 @@ public class Simulator extends Subscriber{
 
     public boolean canDeclareEmergency(Emergency emergency) {
         boolean res = true;
+        // TODO : enlever la condition qui teste si une emergency est détectée par au moins 3 capteurs
         res = emergency.getSensors().size() >=3;
         for(Sensor s : emergency.getSensors()) {
             for(Emergency f : this.emergencies) {
@@ -118,9 +132,19 @@ public class Simulator extends Subscriber{
         return res;
     }
 
+    public Sensor getOneSensor(String idSensor) {
+        Sensor s = null;
+        for (Sensor sensor : this.sensors) {
+            if (sensor.getId().equals(idSensor))
+                s = sensor;
+        }
+        return s;
+    }
+
     @Override
     public String toString() {
         String str = "========Simulator========\n";
+        str += "Simulateur d'urgences\n";
         str += "========Sensors========\n";
         for(Sensor sensor : this.sensors)
             str += sensor.toJSON() + ",\n";

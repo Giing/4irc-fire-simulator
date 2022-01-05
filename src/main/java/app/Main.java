@@ -23,13 +23,9 @@ public class Main {
         System.out.println("==================================");
 
         Api api = Api.getInstance();
-        // System.out.println(api.sensor.getAll());
         List<Sensor> simulatorSensors = api.sensor.getAll();
         System.out.println(simulatorSensors);
         Simulator sim = new Simulator(simulatorSensors);
-        // System.out.println(sim.getSensors());
-        // sim.initializeSimulation();
-        // System.out.println(sim.getSensors());
 
         /***
          * Websocket
