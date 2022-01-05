@@ -22,4 +22,8 @@ public class Coord {
         this.latitude = latitude;
         this.longitude = longitude;
     }
+
+    public double getDistance(Coord c2) {
+        return Math.sqrt(Math.pow((this.latitude - c2.getLatitude()), 2) + Math.pow((this.longitude - c2.getLongitude()), 2));
+    }
 }

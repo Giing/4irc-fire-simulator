@@ -68,6 +68,10 @@ public class Sensor {
         this.emergencyId = emergencyId;
     }
 
+    public boolean isInRadius(Coord coordinates) {
+        return radius < this.location.getDistance(coordinates);
+    }
+
     public void incrementIntensite(int inc) {
         this.intensity += inc;
     }

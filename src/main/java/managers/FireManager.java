@@ -19,6 +19,7 @@ import module.socket.Subscriber;
 
 public class FireManager extends Subscriber {
     private List<Sensor> sensors = new ArrayList<Sensor>();
+    private List<Emergency> potentialNewFire = new ArrayList<Emergency>();
     private final Api api = Api.getInstance();
 
     public FireManager() {
@@ -28,21 +29,43 @@ public class FireManager extends Subscriber {
     @Override
     public void onUpdateSensors(List<Sensor> sensors) {
         this.sensors = sensors;
-        this.detectNewFire();
+        for (Sensor sensor : sensors) {
+            this.detectPotentialFire(sensor);
+        }
+    }
+
+    private void detectPotentialFire(Sensor sensor) {
+        // TODO replace "0" with null for production
+        if(Integer.parseInt(sensor.getEmergencyId()) == 0 && sensor.getIntensity() > 1) {
+            List<Emergency> relationWithSensor =  this.potentialNewFire.stream().filter(fire -> sensor.isInRadius(fire.getLocation())).collect(Collectors.toList());
+            
+            if(relationWithSensor.size() == 1) {
+                Emergency fire = relationWithSensor.get(0);
+                fire.addSensor(sensor);
+                this.computeFirePosition(fire);
+            } else if(relationWithSensor.size() == 0) {
+                List<Sensor> newSensors = new ArrayList<Sensor>();
+                newSensors.add(sensor);
+                this.potentialNewFire.add(new Emergency("2", sensor.getLocation(), newSensors));
+            }
+        }
     }
     
-    private void detectNewFire() {
-        List<Sensor> trigerredSensors = this.filterSensors();
+    private void computeFirePosition(Emergency fire) {
+        List<Sensor> trigerredSensors = fire.getSensors();
         
         if(trigerredSensors.size() > 2 && trigerredSensors.size() < 5) {
-            NonLinearLeastSquaresSolver solver = new NonLinearLeastSquaresSolver(new TrilaterationFunction(getSensorsPosition(trigerredSensors), getSensorsDistance(trigerredSensors)), new LevenbergMarquardtOptimizer());
+            double[][] positions = getSensorsPosition(trigerredSensors);
+            double[] distances = getSensorsDistance(trigerredSensors);
+
+            NonLinearLeastSquaresSolver solver = new NonLinearLeastSquaresSolver(new TrilaterationFunction(positions, distances), new LevenbergMarquardtOptimizer());
             Optimum optimum = solver.solve();
             
             double[] centroid = optimum.getPoint().toArray();
             
             Coord fireCoordinates = new Coord(centroid[0], centroid[1]);
             
-            Emergency fire = new Emergency("1", fireCoordinates, trigerredSensors);
+            fire.setLocation(fireCoordinates);
             api.emergency.createOrUpdate(Arrays.asList(fire));
         }
     }
@@ -68,7 +91,7 @@ public class FireManager extends Subscriber {
 
         for(int i = 0; i<newSensors.size(); i++) {
             Sensor sensor = newSensors.get(i);
-            positions[i] = sensor.getRadius() * sensor.getIntensity() / 100;
+            positions[i] = sensor.getRadius() - (sensor.getIntensity() * sensor.getRadius()) / 100;
         }
 
         return positions;

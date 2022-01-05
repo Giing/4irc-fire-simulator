@@ -6,7 +6,7 @@ import com.google.gson.JsonDeserializer;
 
 public class Emergency {
     private final String id_emergency;
-    private final Coord location;
+    private Coord location;
     private int intensity;
     private List<Sensor> sensors;
 
@@ -19,10 +19,17 @@ public class Emergency {
     public void setSensors(List<Sensor> sensors) {
         this.sensors = sensors;
     }
+    public void addSensor(Sensor sensor) {
+        this.sensors.add(sensor);
+    }
 
     public String getId() { return this.id_emergency; }
     public int getIntensity() { return this.intensity; }
     public Coord getLocation() { return this.location; }
+
+    public void setLocation(Coord position) {
+        this.location = position;
+    }
 
     public boolean isThereSensorInFire(Sensor sensor) {
         boolean res = false;

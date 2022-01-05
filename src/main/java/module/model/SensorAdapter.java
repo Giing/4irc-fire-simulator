@@ -21,7 +21,7 @@ public class SensorAdapter implements JsonDeserializer<Sensor>, JsonSerializer<S
 
         // Si il existe un emergencyId on l'ajoute à l'objet sensor
         if (!jsonObject.get("emergencyId").isJsonNull())
-            sensor.setEmergencyId(jsonObject.get("emergencyId").toString());
+            sensor.setEmergencyId(jsonObject.get("emergencyId").getAsString());
 
         return sensor;
     }
@@ -30,7 +30,9 @@ public class SensorAdapter implements JsonDeserializer<Sensor>, JsonSerializer<S
     public JsonElement serialize(Sensor src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject obj = new JsonObject();
         obj.addProperty("id", src.getId());
-        obj.addProperty("emergencyId", src.getEmergencyId());
+        if(src.getEmergencyId() != null) {
+            obj.addProperty("emergencyId", src.getEmergencyId());
+        }
         obj.addProperty("radius", src.getRadius());
         obj.addProperty("intensity", src.getIntensity());
         obj.addProperty("longitude", src.getLocation().getLongitude());

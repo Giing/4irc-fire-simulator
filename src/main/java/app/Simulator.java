@@ -81,6 +81,7 @@ public class Simulator extends Subscriber{
         // Génération de la latitude/longitude du feu
         double fireLat = this.latitude_min + Math.random() * (this.latitude_max - this.latitude_min);
         double fireLong = this.longitude_min + Math.random() * (this.longitude_max - this.longitude_min);
+        Coord fireCoord = new Coord(fireLat, fireLong);
         List<Sensor> fireSensors = new ArrayList<>();
 
         for (Sensor sensor : this.sensors) {
@@ -88,7 +89,7 @@ public class Simulator extends Subscriber{
             double sensorRadius = Math.pow(sensor.getRadius(), 2);
 
             // Calcul de l'intensité en fonction de la distance entre le centre du feu et le centre du sensor
-            int intensity = (int)Math.round(distance * 100 / sensorRadius);
+            int intensity = (int)Math.round((sensorRadius - distance) * 100 / sensorRadius);
             if (distance < sensorRadius) {
                 sensor.incrementIntensite(intensity);
                 fireSensors.add(sensor);

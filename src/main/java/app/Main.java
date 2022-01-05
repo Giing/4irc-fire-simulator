@@ -2,6 +2,7 @@ package app;
 
 import module.api.Api;
 import module.api.Http;
+import module.model.Coord;
 import module.model.Emergency;
 import module.model.Sensor;
 import module.socket.Events;
@@ -30,6 +31,12 @@ public class Main {
         // System.out.println(sim.getSensors());
         // sim.initializeSimulation();
         // System.out.println(sim.getSensors());
+        
+        // compute 
+        // Coord coord1 = new Coord(45.753967, 4.8088310000000005);
+        // Coord coord2 = new Coord(45.763967, 4.819831000000001 );
+        // double distance = coord1.getDistance(coord2);
+        // System.out.println(distance);
 
         /***
          * Websocket
@@ -47,7 +54,9 @@ public class Main {
             Emergency emergency = sim.initEmergency();
             if (emergency != null) {
                 api.emergency.createOrUpdate(Arrays.asList(emergency));
-                api.sensor.createOrUpdate(emergency.getSensors());
+                for (Sensor sensor : emergency.getSensors()) {
+                    api.sensor.createOrUpdate(Arrays.asList(sensor));
+                }
                 break;
             }
             System.out.println("Attente de " + delayBetweenTwoEmergencies / 1000 + " secondes");
