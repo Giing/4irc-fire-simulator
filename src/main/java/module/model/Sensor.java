@@ -38,6 +38,8 @@ public class Sensor {
         return intensity;
     }
 
+    public void setIntensity(int intensity) { this.intensity = intensity; }
+
     public void setEmergencyId(String id) { this.emergencyId = id; }
 
     public Sensor(String id, Coord location, int intensity) {

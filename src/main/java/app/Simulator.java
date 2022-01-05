@@ -101,9 +101,9 @@ public class Simulator extends Subscriber{
             double sensorRadius = Math.pow(sensor.getRadius(), 2);
 
             // Calcul de l'intensité en fonction de la distance entre le centre du feu et le centre du sensor
-            int intensity = (int)Math.round(distance * 100 / sensorRadius);
+            int intensity = (int)Math.round((sensorRadius - distance) * 100 / sensorRadius);
             if (distance < sensorRadius) {
-                sensor.incrementIntensite(intensity);
+                sensor.setIntensity(intensity);
                 fireSensors.add(sensor);
             }
         }
