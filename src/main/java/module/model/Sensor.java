@@ -14,6 +14,7 @@ public class Sensor {
     private final String id;
     private final Coord location;
     private final double radius = 0.01929018172830706 / 2;
+    private final Integer INTENSITY_THRESHOD = 1;
     private int intensity;
 
     public String getEmergencyId() {
@@ -83,6 +84,10 @@ public class Sensor {
             this.intensity -= dec;
         else
             throw new Exception("Intensity cannot be negative");
+    }
+
+    public Boolean isTriggered() {
+        return this.intensity > INTENSITY_THRESHOD;
     }
 
     @Override
