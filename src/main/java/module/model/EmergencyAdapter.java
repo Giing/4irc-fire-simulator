@@ -11,8 +11,8 @@ public class EmergencyAdapter implements JsonDeserializer<Emergency>, JsonSerial
         JsonObject jsonObject = json.getAsJsonObject();
 
         Coord coord = new Coord(
-            jsonObject.get("longitude").getAsDouble(),
-            jsonObject.get("latitude").getAsDouble()
+            jsonObject.get("latitude").getAsDouble(),
+            jsonObject.get("longitude").getAsDouble()
         );
 
         return new Emergency(

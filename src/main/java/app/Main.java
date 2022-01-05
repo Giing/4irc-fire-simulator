@@ -48,9 +48,10 @@ public class Main {
             if (emergency != null) {
                 api.emergency.createOrUpdate(Arrays.asList(emergency));
                 api.sensor.createOrUpdate(emergency.getSensors());
+                break;
             }
             System.out.println("Attente de " + delayBetweenTwoEmergencies / 1000 + " secondes");
-            sleep(delayBetweenTwoEmergencies);
+            // sleep(delayBetweenTwoEmergencies);
         }
 
         /*sleep(500);

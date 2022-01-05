@@ -42,9 +42,8 @@ public class FireManager extends Subscriber {
             
             Coord fireCoordinates = new Coord(centroid[0], centroid[1]);
             
-            Emergency fire = new Emergency("0", fireCoordinates, trigerredSensors);
+            Emergency fire = new Emergency("1", fireCoordinates, trigerredSensors);
             api.emergency.createOrUpdate(Arrays.asList(fire));
-            System.out.println("YESAI");
         }
     }
 
@@ -58,7 +57,7 @@ public class FireManager extends Subscriber {
         for(int i = 0; i<newSensors.size(); i++) {
             Sensor sensor = newSensors.get(i);
             positions[i][0] = sensor.getLocation().getLatitude();
-            positions[i][1] = sensor.getLocation().getLatitude();
+            positions[i][1] = sensor.getLocation().getLongitude();
         }
 
         return positions;

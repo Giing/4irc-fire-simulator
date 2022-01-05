@@ -108,6 +108,7 @@ public class Simulator extends Subscriber{
 
     public boolean canDeclareEmergency(Emergency emergency) {
         boolean res = true;
+        res = emergency.getSensors().size() >=3;
         for(Sensor s : emergency.getSensors()) {
             for(Emergency f : this.emergencies) {
                 if(f.isThereSensorInFire(s))
