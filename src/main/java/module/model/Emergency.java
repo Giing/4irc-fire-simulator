@@ -25,6 +25,7 @@ public class Emergency {
 
     public String getId() { return this.id_emergency; }
     public int getIntensity() { return this.intensity; }
+    public void setIntensity(int intensity) { this.intensity = intensity; }
     public Coord getLocation() { return this.location; }
 
     public void setLocation(Coord position) {

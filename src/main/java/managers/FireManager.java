@@ -91,7 +91,7 @@ public class FireManager extends Subscriber {
 
         for(int i = 0; i<newSensors.size(); i++) {
             Sensor sensor = newSensors.get(i);
-            positions[i] = sensor.getRadius() - (sensor.getIntensity() * sensor.getRadius()) / 100;
+            positions[i] = sensor.getRadius() - (sensor.getRadius() * sensor.getIntensity() / 100);
         }
 
         return positions;

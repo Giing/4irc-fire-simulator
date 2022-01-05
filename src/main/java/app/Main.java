@@ -24,19 +24,9 @@ public class Main {
         System.out.println("==================================");
 
         Api api = Api.getInstance();
-        // System.out.println(api.sensor.getAll());
         List<Sensor> simulatorSensors = api.sensor.getAll();
         System.out.println(simulatorSensors);
         Simulator sim = new Simulator(simulatorSensors);
-        // System.out.println(sim.getSensors());
-        // sim.initializeSimulation();
-        // System.out.println(sim.getSensors());
-        
-        // compute 
-        // Coord coord1 = new Coord(45.753967, 4.8088310000000005);
-        // Coord coord2 = new Coord(45.763967, 4.819831000000001 );
-        // double distance = coord1.getDistance(coord2);
-        // System.out.println(distance);
 
         /***
          * Websocket
