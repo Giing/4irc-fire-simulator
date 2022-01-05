@@ -46,7 +46,7 @@ public class FireManager extends Subscriber {
             } else if(relationWithSensor.size() == 0) {
                 List<Sensor> newSensors = new ArrayList<Sensor>();
                 newSensors.add(sensor);
-                this.potentialNewFire.add(new Emergency("2", sensor.getLocation(), newSensors));
+                this.potentialNewFire.add(new Emergency("1", sensor.getLocation(), newSensors));
             }
         }
     }
