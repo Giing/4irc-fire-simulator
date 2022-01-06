@@ -9,7 +9,15 @@ public class Api {
 
     /** Instance unique non préinitialisée */
     private static Api INSTANCE = null;
-    private static Http defaultClient = new Http();
+    private static Http defaultClient;
+
+    static {
+        try {
+            defaultClient = new Http();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /** Constructeur privé */
     private Api()
