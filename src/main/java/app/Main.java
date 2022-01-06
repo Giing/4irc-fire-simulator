@@ -24,8 +24,9 @@ public class Main {
         System.out.println("==================================");
         System.out.println("|| Bienvenue dans le simulateur ||");
         System.out.println("==================================");
+        PropertiesReader prop = new PropertiesReader();
 
-        Api api = Api.getInstance();
+        Api api = new Api(prop.getProp().getProperty("BASE_URL"), prop.getProp().getProperty("API_KEY"));
         List<Sensor> simulatorSensors = api.sensor.getAll();
         System.out.println(simulatorSensors);
         Simulator sim = new Simulator(simulatorSensors);
@@ -33,12 +34,11 @@ public class Main {
         /***
          * Websocket
          */
-        PropertiesReader prop = new PropertiesReader();
-        WebSocket ws = new WebSocket("ws://localhost:3000", prop.getProp().getProperty("WEBSOCKET_KEY"));
+        WebSocket ws = new WebSocket(prop.getProp().getProperty("BASE_URL"), prop.getProp().getProperty("WEBSOCKET_KEY"));
         ws.subscribe(sim, Events.SENSORS.getEvent());
         ws.subscribe(sim, Events.EMERGENCIES.getEvent());
 
-        FireManager test = new FireManager();
+        FireManager test = new FireManager(api);
         ws.subscribe(test, Events.SENSORS.getEvent());
 
         // Boucle infinie de simulation

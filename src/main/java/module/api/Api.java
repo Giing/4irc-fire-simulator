@@ -7,31 +7,17 @@ public class Api {
     public SensorService sensor;
     public EmergencyService emergency;
 
-    /** Instance unique non préinitialisée */
-    private static Api INSTANCE = null;
-    private static Http defaultClient;
+    private Http defaultClient;
 
-    static {
+    /** Constructeur privé */
+    public Api(String baseUrl, String tokenApi)
+    {
         try {
-            defaultClient = new Http();
+            defaultClient = new Http(baseUrl, tokenApi);
+            this.sensor = new SensorService(this.defaultClient);
+            this.emergency = new EmergencyService(this.defaultClient);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /** Constructeur privé */
-    private Api()
-    {
-        this.sensor = new SensorService(this.defaultClient);
-        this.emergency = new EmergencyService(this.defaultClient);
-    }
-     
-    /** Point d'accès pour l'instance unique du singleton */
-    public static synchronized Api getInstance()
-    {           
-        if (INSTANCE == null)
-        {   INSTANCE = new Api(); 
-        }
-        return INSTANCE;
     }
 }

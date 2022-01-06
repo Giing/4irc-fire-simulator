@@ -20,10 +20,10 @@ import module.socket.Subscriber;
 public class FireManager extends Subscriber {
     private List<Sensor> sensors = new ArrayList<Sensor>();
     private List<Emergency> potentialNewFires = new ArrayList<Emergency>();
-    private final Api api = Api.getInstance();
+    private Api api;
 
-    public FireManager() {
-
+    public FireManager(Api api) {
+        this.api = api;
     }
 
     @Override

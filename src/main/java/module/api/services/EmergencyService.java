@@ -1,6 +1,7 @@
 package module.api.services;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -23,7 +24,7 @@ public class EmergencyService extends ApiService{
         } catch (JSONException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            return null;
+            return new ArrayList<Emergency>();
         }
     }
 
@@ -35,7 +36,7 @@ public class EmergencyService extends ApiService{
         } catch (IOException | JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            return null;
+            return new ArrayList<Emergency>();
         }
     }
 }

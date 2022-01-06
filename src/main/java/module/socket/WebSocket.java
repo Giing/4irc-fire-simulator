@@ -28,7 +28,7 @@ public class WebSocket {
     public Socket socket;
 
     public WebSocket(String url, String key) {
-        URL = url;
+        URL = "ws://" + url;
         WS_KEY = key;
 
         init();
