@@ -31,7 +31,7 @@ public class Main {
         /***
          * Websocket
          */
-        WebSocket ws = new WebSocket("ws://localhost:3000", "4739f58f-5e35-4235-8ac5-4fdba549d641");
+        WebSocket ws = new WebSocket("ws://api-simulation:3000", "4739f58f-5e35-4235-8ac5-4fdba549d641");
         ws.subscribe(sim, Events.SENSORS.getEvent());
         ws.subscribe(sim, Events.EMERGENCIES.getEvent());
 
