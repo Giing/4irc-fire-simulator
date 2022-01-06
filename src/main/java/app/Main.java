@@ -11,8 +11,10 @@ import module.socket.WebSocket;
 
 import static java.lang.Thread.sleep;
 
+import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 import managers.FireManager;
 
@@ -31,7 +33,8 @@ public class Main {
         /***
          * Websocket
          */
-        WebSocket ws = new WebSocket("ws://api-simulation:3000", "4739f58f-5e35-4235-8ac5-4fdba549d641");
+        PropertiesReader prop = new PropertiesReader();
+        WebSocket ws = new WebSocket("ws://localhost:3000", prop.getProp().getProperty("WEBSOCKET_KEY"));
         ws.subscribe(sim, Events.SENSORS.getEvent());
         ws.subscribe(sim, Events.EMERGENCIES.getEvent());
 
