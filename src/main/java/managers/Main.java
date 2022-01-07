@@ -1,13 +1,26 @@
 package managers;
 
+import app.PropertiesReader;
+import module.api.Api;
 import module.socket.Events;
 import module.socket.WebSocket;
 
 public class Main {
     public static void main(String args[]) throws Exception {
-        // FireManager test = new FireManager();
+        System.out.println("==================================");
+        System.out.println("|| Bienvenue dans la gestion des managers ||");
+        System.out.println("==================================");
+        
+        PropertiesReader prop = new PropertiesReader();
+        Api api = new Api(prop.getProp().getProperty("BASE_URL"), prop.getProp().getProperty("API_KEY"));
+        WebSocket ws = new WebSocket(prop.getProp().getProperty("BASE_URL"), prop.getProp().getProperty("WEBSOCKET_KEY"));
 
-        // WebSocket ws = new WebSocket("ws://localhost:3000", "4739f58f-5e35-4235-8ac5-4fdba549d641");
-        // ws.subscribe(test, Events.SENSORS.getEvent());
+
+        FireManager test = new FireManager(api);
+
+        /***
+         * Websocket
+         */
+        ws.subscribe(test, Events.SENSORS.getEvent());
     }
 }

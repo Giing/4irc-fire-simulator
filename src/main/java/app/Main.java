@@ -38,9 +38,6 @@ public class Main {
         ws.subscribe(sim, Events.SENSORS.getEvent());
         ws.subscribe(sim, Events.EMERGENCIES.getEvent());
 
-        FireManager test = new FireManager(api);
-        ws.subscribe(test, Events.SENSORS.getEvent());
-
         // Boucle infinie de simulation
         while(true) {
             int delayBetweenTwoEmergencies = 30000 + (int)(Math.random() * ((45000 - 30000) + 1));
