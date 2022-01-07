@@ -20,10 +20,11 @@ public class SensorService extends ApiService{
     public List<Sensor> getAll() {
         try {
             String result = this.client.get("/sensors");
+            // System.out.println(result);
             return this.mapper.sensor.fromJson(new JSONArray(result));
         } catch (JSONException | IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            // e.printStackTrace();
             return new ArrayList<Sensor>();
         }
     }

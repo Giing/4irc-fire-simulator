@@ -12,6 +12,7 @@ import module.socket.WebSocket;
 import static java.lang.Thread.sleep;
 
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -27,7 +28,18 @@ public class Main {
         PropertiesReader prop = new PropertiesReader();
 
         Api api = new Api(prop.getProp().getProperty("BASE_URL"), prop.getProp().getProperty("API_KEY"));
-        List<Sensor> simulatorSensors = api.sensor.getAll();
+
+
+        List<Sensor> simulatorSensors = new ArrayList<Sensor>();
+        System.out.println("Pending ...");
+        do
+        {
+            simulatorSensors = api.sensor.getAll();
+        } while (simulatorSensors.isEmpty());
+
+        System.out.println("Connection successful !");
+
+
         System.out.println(simulatorSensors);
         Simulator sim = new Simulator(simulatorSensors);
 
@@ -37,6 +49,8 @@ public class Main {
         WebSocket ws = new WebSocket(prop.getProp().getProperty("BASE_URL"), prop.getProp().getProperty("WEBSOCKET_KEY"));
         ws.subscribe(sim, Events.SENSORS.getEvent());
         ws.subscribe(sim, Events.EMERGENCIES.getEvent());
+
+        System.out.println("Simulator started !");
 
         // Boucle infinie de simulation
         while(true) {
@@ -49,7 +63,7 @@ public class Main {
                 }
                 break;
             }
-            System.out.println("Attente de " + delayBetweenTwoEmergencies / 1000 + " secondes");
+            // System.out.println("Attente de " + delayBetweenTwoEmergencies / 1000 + " secondes");
             // sleep(delayBetweenTwoEmergencies);
         }
 
