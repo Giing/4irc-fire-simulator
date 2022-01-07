@@ -28,8 +28,10 @@ public class FireManager extends Subscriber {
 
     @Override
     public void onUpdateSensors(List<Sensor> sensors) {
+        System.out.println("Sensors received :");
         this.sensors = sensors;
         for (Sensor sensor : sensors) {
+            System.out.println(sensor);
             this.detectPotentialFire(sensor);
         }
     }
@@ -46,7 +48,7 @@ public class FireManager extends Subscriber {
             } else if(relationWithSensor.size() == 0) {
                 List<Sensor> newSensors = new ArrayList<Sensor>();
                 newSensors.add(sensor);
-                this.potentialNewFires.add(new Emergency("1", sensor.getLocation(), newSensors));
+                this.potentialNewFires.add(new Emergency(java.util.UUID.randomUUID().toString(), sensor.getLocation(), newSensors));
             }
         }
     }
@@ -69,6 +71,7 @@ public class FireManager extends Subscriber {
             fire.setLocation(fireCoordinates);
 
             // push and remove the fire
+            System.out.println("Add new fire !!!");
             api.emergency.createOrUpdate(Arrays.asList(fire));
             this.potentialNewFires.remove(fire);
         }

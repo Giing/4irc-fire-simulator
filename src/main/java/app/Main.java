@@ -57,7 +57,7 @@ public class Main {
             int delayBetweenTwoEmergencies = 30000 + (int)(Math.random() * ((45000 - 30000) + 1));
             Emergency emergency = sim.initEmergency();
             if (emergency != null) {
-                // api.emergency.createOrUpdate(Arrays.asList(emergency));
+                api.emergency.createOrUpdate(Arrays.asList(emergency));
                 for (Sensor sensor : emergency.getSensors()) {
                     api.sensor.createOrUpdate(Arrays.asList(sensor));
                 }

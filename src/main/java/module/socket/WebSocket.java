@@ -42,6 +42,7 @@ public class WebSocket {
         try {
             socket = IO.socket(URL, options);
             socket.connect();
+            System.out.println("WS connection successful to " + URL);
         } catch (URISyntaxException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -65,12 +66,13 @@ public class WebSocket {
         socket.on(event, new Listener() {
             @Override
             public void call(Object... args) {
-
+                System.out.println("Hello from api !");
                 JSONArray content = (JSONArray)args[0];
 
 
                 switch(event) {
                     case "onUpdateSensors":
+                        System.out.println(mapper.sensor.fromJson(content));
                         subscriber.onUpdateSensors(mapper.sensor.fromJson(content));
                         break;
                     case "onUpdateEmergencies":

@@ -14,13 +14,13 @@ public class SensorAdapter implements JsonDeserializer<Sensor>, JsonSerializer<S
         );
 
         Sensor sensor = new Sensor(
-                jsonObject.get("id").getAsString(),
-                coord,
-                jsonObject.get("intensity").getAsInt()
+            jsonObject.get("id").getAsString(),
+            coord,
+            jsonObject.get("intensity").getAsInt()
         );
 
         // Si il existe un emergencyId on l'ajoute à l'objet sensor
-        if (!jsonObject.get("emergencyId").isJsonNull())
+        if (jsonObject.has("emergencyId") && !jsonObject.get("emergencyId").isJsonNull())
             sensor.setEmergencyId(jsonObject.get("emergencyId").getAsString());
 
         return sensor;
