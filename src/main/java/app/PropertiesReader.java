@@ -1,6 +1,7 @@
 package app;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class PropertiesReader {
@@ -12,11 +13,11 @@ public class PropertiesReader {
     private Properties prop;
 
     public PropertiesReader() throws Exception {
-        String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-        String appConfigPath = rootPath + "config.properties";
+        InputStream config = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties");
+        
 
         Properties prop = new Properties();
-        prop.load(new FileInputStream(appConfigPath));
+        prop.load(config);
         this.prop = prop;
     }
 }
