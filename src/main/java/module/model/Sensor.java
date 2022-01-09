@@ -106,7 +106,7 @@ public class Sensor {
                 "id='" + id + '\'' +
                 ", location='" + this.location + "'" +
                 ", intensite='" + intensity + "\'" +
-                ", radius='" + radius + "\'" +
+                ", \"emergencyId\":" + this.emergencyId +
                 "}\n";
     }
 
