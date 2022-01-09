@@ -40,4 +40,15 @@ public class Team {
     public boolean isHandlingFromCoord(Coord location) {
         return this.getLocation().getDistance(location) <= this.radius;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id='" + id + '\'' +
+                ", location='" + this.location + "'" +
+                ", level='" + this.level + "\'" +
+                ", radius='" + radius + "\'" +
+                ", emergencyId='" + emergencyId + "\'" +
+                "}\n";
+    }
 }

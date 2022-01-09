@@ -16,7 +16,7 @@ public class Main {
         System.out.println("==================================");
         
         PropertiesReader prop = new PropertiesReader();
-        Api api = new Api(prop.getProp().getProperty("BASE_URL"), prop.getProp().getProperty("API_KEY"));
+        Api api = new Api(prop.getProp().getProperty("EMERGENCY_BASE_URL"), prop.getProp().getProperty("EMERGENCY_API_KEY"));
         
         List<Sensor> simulatorSensors = new ArrayList<Sensor>();
         System.out.println("Pending ...");
@@ -26,7 +26,7 @@ public class Main {
         } while (simulatorSensors.isEmpty());
         
         System.out.println("Connection successful !");
-        WebSocket ws = new WebSocket(prop.getProp().getProperty("BASE_URL"), prop.getProp().getProperty("WEBSOCKET_KEY"));
+        WebSocket ws = new WebSocket(prop.getProp().getProperty("EMERGENCY_BASE_URL"), prop.getProp().getProperty("EMERGENCY_WEBSOCKET_KEY"));
 
 
         FireManager fire = new FireManager(api);
