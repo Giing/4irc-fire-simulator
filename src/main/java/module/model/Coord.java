@@ -10,6 +10,10 @@ public class Coord {
         return "(" + this.latitude + ", " + this.longitude + ")";
     }
 
+    public String toApi() {
+        return this.latitude + ", " + this.longitude;
+    }
+
     public double getLatitude() {
         return latitude;
     }

@@ -1,5 +1,7 @@
 package module.model;
 
+import java.util.Timer;
+
 import com.google.gson.JsonDeserializer;
 
 public class Team {
@@ -9,6 +11,8 @@ public class Team {
     private String stationId;
     private String emergencyId;
     private final double radius = 0.01929018172830706;
+
+    public Boolean isHandling = false;
 
     public static JsonDeserializer<Team> jsonAdapter = new TeamAdapter();
 
