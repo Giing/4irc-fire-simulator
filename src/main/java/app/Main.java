@@ -44,13 +44,13 @@ public class Main {
 
 
         System.out.println(simulatorSensors);
-        Simulator sim = new Simulator(simulatorSensors, api);
+        Simulator sim = new Simulator(simulatorSensors, api, apiEmergency);
 
         /***
          * Websocket
          */
         // Connection to the simulation
-        WebSocket ws = new WebSocket(prop.getProp().getProperty("SIMULATOR_API_KEY"), prop.getProp().getProperty("SIMULATOR_WEBSOCKET_KEY"));
+        WebSocket ws = new WebSocket(prop.getProp().getProperty("SIMULATOR_BASE_URL"), prop.getProp().getProperty("SIMULATOR_WEBSOCKET_KEY"));
         ws.subscribe(sim, Events.SENSORS.getEvent());
         ws.subscribe(sim, Events.EMERGENCIES.getEvent());
 
@@ -65,10 +65,15 @@ public class Main {
             int delayBetweenTwoEmergencies = 30000 + (int)(Math.random() * ((45000 - 30000) + 1));
             Emergency emergency = sim.initEmergency();
             if (emergency != null) {
-                api.emergency.createOrUpdate(Arrays.asList(emergency));
-                api.sensor.createOrUpdate(Arrays.asList(emergency.getSensors()));
+                // TODO Remove inproduction
+                apiEmergency.sensor.createOrUpdate(emergency.getSensors());
 
-                apiEmergency.sensor.createOrUpdate(Arrays.asList(emergency.getSensors()));
+                api.emergency.createOrUpdate(Arrays.asList(emergency));
+                for (Sensor sensor : emergency.getSensors()) {
+                    sensor.setEmergencyId(emergency.getId());
+                }
+                api.sensor.createOrUpdate(emergency.getSensors());
+
                 break;
             }
             // System.out.println("Attente de " + delayBetweenTwoEmergencies / 1000 + " secondes");

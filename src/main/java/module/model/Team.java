@@ -10,7 +10,7 @@ public class Team {
     private Integer level;
     private String stationId;
     private String emergencyId;
-    private final double radius = 0.01929018172830706;
+    private final double radius = 0.01929018172830706 / 10;
 
     public Boolean isHandling = false;
 
