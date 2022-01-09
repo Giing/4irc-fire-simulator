@@ -1,6 +1,7 @@
 package module.model;
 
 import java.util.List;
+import java.util.Timer;
 
 import com.google.gson.JsonDeserializer;
 
@@ -9,6 +10,8 @@ public class Emergency {
     private Coord location;
     private int intensity;
     private List<Sensor> sensors;
+
+    public Boolean isHandled = false;
 
     public static JsonDeserializer<Emergency> jsonAdapter = new EmergencyAdapter();
 

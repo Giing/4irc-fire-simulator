@@ -188,8 +188,9 @@ public class Simulator extends Subscriber {
             Api apiEmergency = this.apiEmergency;
             Map<String, Emergency> emergencies = this.emergencies;
             
-            if(emergencyHandledByTeam != null) {
+            if(emergencyHandledByTeam != null && !emergencyHandledByTeam.isHandled) {
                 System.out.println("Launch task");
+                emergencyHandledByTeam.isHandled = true;
                 new Timer().scheduleAtFixedRate(new TimerTask(){
                     @Override
                     public void run(){
