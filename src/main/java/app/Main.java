@@ -27,15 +27,18 @@ public class Main {
         System.out.println("==================================");
         PropertiesReader prop = new PropertiesReader();
 
-        Api api = new Api(prop.getProp().getProperty("BASE_URL"), prop.getProp().getProperty("API_KEY"));
+        Api api = new Api(prop.getProp().getProperty("SIMULATOR_BASE_URL"), prop.getProp().getProperty("SIMULATOR_API_KEY"));
+        Api apiEmergency = new Api(prop.getProp().getProperty("EMERGENCY_BASE_URL"), prop.getProp().getProperty("EMERGENCY_API_KEY"));
 
 
         List<Sensor> simulatorSensors = new ArrayList<Sensor>();
+        List<Sensor> emergencySensors = new ArrayList<Sensor>();
         System.out.println("Pending ...");
         do
         {
             simulatorSensors = api.sensor.getAll();
-        } while (simulatorSensors.isEmpty());
+            emergencySensors = apiEmergency.sensor.getAll();
+        } while (simulatorSensors.isEmpty() && emergencySensors.isEmpty());
 
         System.out.println("Connection successful !");
 
@@ -47,12 +50,12 @@ public class Main {
          * Websocket
          */
         // Connection to the simulation
-        WebSocket ws = new WebSocket(prop.getProp().getProperty("BASE_URL"), prop.getProp().getProperty("WEBSOCKET_KEY"));
+        WebSocket ws = new WebSocket(prop.getProp().getProperty("SIMULATOR_API_KEY"), prop.getProp().getProperty("SIMULATOR_WEBSOCKET_KEY"));
         ws.subscribe(sim, Events.SENSORS.getEvent());
         ws.subscribe(sim, Events.EMERGENCIES.getEvent());
 
         // Connection to the emergency
-        WebSocket wsEmeregncy = new WebSocket(prop.getProp().getProperty("BASE_URL"), prop.getProp().getProperty("WEBSOCKET_KEY"));
+        WebSocket wsEmeregncy = new WebSocket(prop.getProp().getProperty("EMERGENCY_BASE_URL"), prop.getProp().getProperty("EMERGENCY_WEBSOCKET_KEY"));
         wsEmeregncy.subscribe(sim, Events.TEAMS.getEvent());
 
         System.out.println("Simulator started !");
@@ -63,9 +66,9 @@ public class Main {
             Emergency emergency = sim.initEmergency();
             if (emergency != null) {
                 api.emergency.createOrUpdate(Arrays.asList(emergency));
-                for (Sensor sensor : emergency.getSensors()) {
-                    api.sensor.createOrUpdate(Arrays.asList(sensor));
-                }
+                api.sensor.createOrUpdate(Arrays.asList(emergency.getSensors()));
+
+                apiEmergency.sensor.createOrUpdate(Arrays.asList(emergency.getSensors()));
                 break;
             }
             // System.out.println("Attente de " + delayBetweenTwoEmergencies / 1000 + " secondes");
