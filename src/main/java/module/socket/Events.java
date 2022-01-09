@@ -3,6 +3,7 @@ package module.socket;
 public enum Events {
     SENSORS("onUpdateSensors"),
     EMERGENCIES("onUpdateEmergencies"),
+    DEMERGENCIES("onUpdateEmergencies"),
     TEAMS("onUpdateTeams"),
     STATIONS("onUpdateStations");
 

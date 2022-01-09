@@ -43,4 +43,15 @@ public class Http {
             return response.body().string();
         }
     }
+
+    public String delete(String url) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + url)
+            .header("x-access-token", API_W)
+            .delete()
+            .build();
+        try (Response response = client.newCall(request).execute()) {
+            return response.body().string();
+        }
+    }
 }

@@ -41,14 +41,19 @@ public class Main {
 
 
         System.out.println(simulatorSensors);
-        Simulator sim = new Simulator(simulatorSensors);
+        Simulator sim = new Simulator(simulatorSensors, api);
 
         /***
          * Websocket
          */
+        // Connection to the simulation
         WebSocket ws = new WebSocket(prop.getProp().getProperty("BASE_URL"), prop.getProp().getProperty("WEBSOCKET_KEY"));
         ws.subscribe(sim, Events.SENSORS.getEvent());
         ws.subscribe(sim, Events.EMERGENCIES.getEvent());
+
+        // Connection to the emergency
+        WebSocket wsEmeregncy = new WebSocket(prop.getProp().getProperty("BASE_URL"), prop.getProp().getProperty("WEBSOCKET_KEY"));
+        wsEmeregncy.subscribe(sim, Events.TEAMS.getEvent());
 
         System.out.println("Simulator started !");
 

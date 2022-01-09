@@ -28,17 +28,26 @@ public class FireManager extends Subscriber {
 
     @Override
     public void onUpdateSensors(List<Sensor> sensors) {
-        System.out.println("Sensors received :");
+        // System.out.println("Sensors received :");
         this.sensors = sensors;
         for (Sensor sensor : sensors) {
-            System.out.println(sensor);
             this.detectPotentialFire(sensor);
+        }
+    }
+    @Override
+    public void onUpdateEmergencies(List<Emergency> emergencies) {
+        // Delete emergencies with 0 intensity
+        for (Emergency emergency : emergencies) {
+            if(emergency.getIntensity() == 0) {
+                this.api.emergency.delete(emergency);
+            }
         }
     }
 
     private void detectPotentialFire(Sensor sensor) {
-        // TODO replace "0" with null for production
+
         if(sensor.getEmergencyId() == null && sensor.isTriggered()) {
+            // Potential new Fire
             List<Emergency> relationWithSensor =  this.potentialNewFires.stream().filter(fire -> sensor.isInRadius(fire.getLocation())).collect(Collectors.toList());
             
             if(relationWithSensor.size() == 1) {
@@ -51,6 +60,24 @@ public class FireManager extends Subscriber {
                 this.potentialNewFires.add(new Emergency(java.util.UUID.randomUUID().toString(), sensor.getLocation(), newSensors));
             }
         }
+
+        if(sensor.getEmergencyId() != null) {
+            try {
+                // Update fire with new intensity
+                List<Sensor> sensors = this.api.sensor.getAllByEmergency(sensor.getEmergencyId());
+                Emergency fire = this.api.emergency.getById(sensor.getEmergencyId());
+
+                Integer initialIntesity = fire.getIntensity();
+                fire.computeIntensityFromSensors(sensors);
+
+                if(initialIntesity != fire.getIntensity()) {
+                    this.api.emergency.createOrUpdate(Arrays.asList(fire));
+            }
+            } catch(Error err) {
+                System.out.println(sensor.getEmergencyId());
+            }
+        }
+
     }
     
     private void computeFirePosition(Emergency fire) {
@@ -69,10 +96,17 @@ public class FireManager extends Subscriber {
 
             // apply new location to the fire
             fire.setLocation(fireCoordinates);
+            fire.computeIntensityFromSensors(trigerredSensors);
 
             // push and remove the fire
             System.out.println("Add new fire !!!");
             api.emergency.createOrUpdate(Arrays.asList(fire));
+
+            for (Sensor sensor : trigerredSensors) {
+                sensor.setEmergencyId(fire.getId());
+            }
+            this.api.sensor.createOrUpdate(trigerredSensors);
+
             this.potentialNewFires.remove(fire);
         }
     }

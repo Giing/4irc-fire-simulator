@@ -29,11 +29,15 @@ public class Main {
         WebSocket ws = new WebSocket(prop.getProp().getProperty("BASE_URL"), prop.getProp().getProperty("WEBSOCKET_KEY"));
 
 
-        FireManager test = new FireManager(api);
+        FireManager fire = new FireManager(api);
+        StationManager station = new StationManager(api);
 
         /***
          * Websocket
          */
-        ws.subscribe(test, Events.SENSORS.getEvent());
+        ws.subscribe(fire, Events.SENSORS.getEvent());
+        ws.subscribe(fire, Events.EMERGENCIES.getEvent());
+        ws.subscribe(station, Events.EMERGENCIES.getEvent());
+        ws.subscribe(station, Events.TEAMS.getEvent());
     }
 }

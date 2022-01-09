@@ -3,13 +3,15 @@ package app;
 import java.lang.reflect.Array;
 import java.util.*;
 
+import module.api.Api;
 import module.json.JsonMapper;
 import module.model.Coord;
 import module.model.Emergency;
 import module.model.Sensor;
+import module.model.Team;
 import module.socket.Subscriber;
 
-public class Simulator extends Subscriber{
+public class Simulator extends Subscriber {
 
     private final double longitude_max    = 4.896831000000001;
     private final double latitude_min     = 45.723967;
@@ -33,6 +35,7 @@ public class Simulator extends Subscriber{
 
     private List<Emergency> emergencies = new ArrayList<>();
     protected JsonMapper mapper = JsonMapper.getInstance();
+    private Api api;
 
     public double getLongitude_min() {
         return longitude_min;
@@ -62,11 +65,10 @@ public class Simulator extends Subscriber{
         return this.sensors;
     }
 
-    public Simulator(List<Sensor> sensors) {
+    public Simulator(List<Sensor> sensors, Api api) {
         this.sensors = sensors;
+        this.api = api;
     }
-
-    public Simulator(){}
 
     @Deprecated
     public Simulator initializeSimulation() {
@@ -79,15 +81,6 @@ public class Simulator extends Subscriber{
             }
         }
         return this;
-    }
-
-    private static Simulator INSTANCE = null;
-
-    public static synchronized Simulator getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new Simulator();
-        }
-        return INSTANCE;
     }
 
     public Emergency initEmergency() {
@@ -109,7 +102,7 @@ public class Simulator extends Subscriber{
             }
         }
 
-        Emergency emergency = new Emergency(this.emergencies.size() , new Coord(fireLat, fireLong), fireSensors);
+        Emergency emergency = new Emergency(java.util.UUID.randomUUID().toString(), new Coord(fireLat, fireLong), fireSensors, 100);
         if (canDeclareEmergency(emergency)) {
             System.out.println("Nouveau feu créé : " + emergency.toJSON() + "\n" + emergency.getSensors());
             // for (Sensor s : emergency.getSensors())
@@ -180,6 +173,36 @@ public class Simulator extends Subscriber{
                 if (em.equals(emergencyToUpdate)) {
                     this.emergencies.set(this.emergencies.indexOf(em), emergencyToUpdate);
                 }
+            }
+        }
+    }
+
+    @Override
+    public void onUpdateTeams(List<Team> teams) {
+        for (Team team : teams) {
+            Emergency emergencyHandledByTeam = this.emergencies.stream()
+                .filter(emergency -> team.isHandlingFromCoord(emergency.getLocation()))
+                .findFirst()
+                .get();
+
+            Api api = this.api;
+
+            if(emergencyHandledByTeam != null) {
+                new Timer().scheduleAtFixedRate(new TimerTask(){
+                    @Override
+                    public void run(){
+                        emergencyHandledByTeam.setIntensity(emergencyHandledByTeam.getIntensity() - team.getLevel());
+                        emergencyHandledByTeam.updateIntensity();
+
+                        api.emergency.createOrUpdate(Arrays.asList(emergencyHandledByTeam));
+                        api.sensor.createOrUpdate(emergencyHandledByTeam.getSensors());
+
+                        if(emergencyHandledByTeam.getIntensity() == 0) {
+                            this.cancel();
+                            return;
+                        }
+                    }
+                }, 0, 1000);
             }
         }
     }
