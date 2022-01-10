@@ -46,7 +46,16 @@ public class Map {
                     legs.add(point);
                 });
             });
+
+            // Exact coord just to be sure
+            legs.add(to);
+        } catch (Exception error) {
+            legs.add(to);
+            System.out.println(error);
         }
+
+        // System.out.println("Map steps: ");
+        // System.out.println(legs);
 
         return legs;
     }

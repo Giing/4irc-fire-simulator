@@ -42,10 +42,10 @@ public class StationManager extends Subscriber {
             // TODO: filter with isAlreadyHandled
             List<Emergency> linkedEmergenciesToStation = emergencies.stream().filter(emergency -> station.isInRadius(emergency.getLocation())).collect(Collectors.toList());
 
-            System.out.println("Emergencies :");
-            System.out.println(linkedEmergenciesToStation);
-            System.out.println("is or will be handled by :");
-            System.out.println(station);
+            // System.out.println("Emergencies :");
+            // System.out.println(linkedEmergenciesToStation);
+            // System.out.println("is or will be handled by :");
+            // System.out.println(station);
 
             List<Team> teams = this.api.team.getAllByStation(station.getId());
             List<Team> availableTeams = teams.stream().filter(team -> team.isAvailable() && !team.isHandling).collect(Collectors.toList());
@@ -60,18 +60,13 @@ public class StationManager extends Subscriber {
                         // is any team available
 
                         Team handleTeam = availableTeams.get(0);
-    
-                        handleTeam.setEmergencyId(emergency.getId());
                         try {
-                            List<Coord> steps = this.mapApi.getDirection(handleTeam.getLocation(), emergency.getLocation());
-                            updateTeamDirection(Collections.enumeration(steps), handleTeam);
-                        } catch (Exception e) {
-                            
+                            affectEmergencyToTeam(emergency, handleTeam);
+                            availableTeams.remove(handleTeam);
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
                         }
-
-    
-                        this.api.team.createOrUpdate(Arrays.asList(handleTeam));
-                        availableTeams.remove(handleTeam);
                     } else {
                         // TODO: what to do if all teams are unvailable ???
                         this.unhandledEmergencies.add(emergency);
@@ -81,19 +76,20 @@ public class StationManager extends Subscriber {
 
                     if (emergency.getIntensity() == 0) {
                         for (Team team : teamsHandlingFire) {
+                            this.api.team.reset(team.getId());
+                            team.setEmergencyId(null);
                             try {
                                 if(this.unhandledEmergencies.isEmpty()) {
                                     // back to station
-                                    List<Coord> steps = this.mapApi.getDirection(team.getLocation(), station.getLocation());
-                                    updateTeamDirection(Collections.enumeration(steps), team);
+                                    teamBackToStation(team);
                                 } else {
+                                    // handle new Emergency
                                     handleNewEmergency(team);
                                 }
 
                             } catch (Exception e) {
-                                
+                                System.out.println(e);
                             }
-                            this.api.team.reset(team.getId());
                         }
                     }
                 }
@@ -102,23 +98,25 @@ public class StationManager extends Subscriber {
     }
 
     private void handleNewEmergency(Team team) throws IOException { 
-        Emergency newEmergency = this.unhandledEmergencies.get(0);
-        this.unhandledEmergencies.remove(0);
-        affectEmergencyToTeam(newEmergency, team);
+        if(!this.unhandledEmergencies.isEmpty()) {
+            Emergency newEmergency = this.unhandledEmergencies.get(0);
+            this.unhandledEmergencies.remove(0);
+            affectEmergencyToTeam(newEmergency, team);
+        }
     }
 
     private void affectEmergencyToTeam(Emergency emergency, Team team) throws IOException {
         team.setEmergencyId(emergency.getId());
         List<Coord> steps = this.mapApi.getDirection(team.getLocation(), emergency.getLocation());
-        updateTeamDirection(Collections.enumeration(steps), team);
+        updateTeamDirectionToEmergency(Collections.enumeration(steps), team);
     }
-
-    private void updateTeamDirection(Enumeration<Coord> steps, Team teamToUpdate) {
+    
+    private void updateTeamDirectionToEmergency(Enumeration<Coord> steps, Team teamToUpdate) {
         if(!teamToUpdate.isHandling) {
             Api api = this.api;
-            System.out.println("Dispatch team: " + teamToUpdate);
             teamToUpdate.isHandling = true;
-
+            
+            System.out.println("Dispatch updateTeamDirectionToEmergency: " + teamToUpdate);
             new Timer().scheduleAtFixedRate(new TimerTask(){
                 @Override
                 public void run(){
@@ -129,6 +127,43 @@ public class StationManager extends Subscriber {
                     } else {
                         teamToUpdate.isHandling = false;
                         this.cancel();
+                        return;
+                    }
+                }
+            }, 0, 1000);
+        }
+    }
+
+    private void teamBackToStation(Team team) throws IOException {
+        Station station = this.api.station.getById(team.getStationId());
+        List<Coord> steps = this.mapApi.getDirection(team.getLocation(), station.getLocation());
+        updateTeamDirectionToStation(Collections.enumeration(steps), team);
+    }
+    
+    private void updateTeamDirectionToStation(Enumeration<Coord> steps, Team teamToUpdate) {
+        if(!teamToUpdate.isHandling) {
+            Api api = this.api;
+            teamToUpdate.isHandling = true;
+            StationManager manager = this;
+
+            System.out.println("Dispatch updateTeamDirectionToStation: " + teamToUpdate);
+            new Timer().scheduleAtFixedRate(new TimerTask(){
+                @Override
+                public void run(){
+                    if(steps.hasMoreElements()) {
+                        Coord step = steps.nextElement();
+                        teamToUpdate.setLocation(step);
+                        api.team.createOrUpdate(Arrays.asList(teamToUpdate));
+                    } else {
+                        teamToUpdate.isHandling = false;
+                        this.cancel();
+                        try {
+                            // try to handle new emeregncy if any 
+                            manager.handleNewEmergency(teamToUpdate);
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
                         return;
                     }
                 }

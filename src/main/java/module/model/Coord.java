@@ -11,7 +11,7 @@ public class Coord {
     }
 
     public String toApi() {
-        return this.latitude + ", " + this.longitude;
+        return this.latitude + "," + this.longitude;
     }
 
     public double getLatitude() {

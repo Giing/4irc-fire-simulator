@@ -36,8 +36,6 @@ public class FireManager extends Subscriber {
 
     @Override
     public void onUpdateSensors(List<Sensor> sensors) {
-        System.out.println("Sensors received :");
-        System.out.println(sensors);
         this.sensors = sensors;
         for (Sensor sensor : sensors) {
             this.detectPotentialFire(sensor);
@@ -61,8 +59,6 @@ public class FireManager extends Subscriber {
         if(sensor.getEmergencyId() == null && sensor.isTriggered()) {
             // Potential new Fire
             List<Emergency> relationWithSensor =  this.potentialNewFires.stream().filter(fire -> sensor.isInRadius(fire.getLocation())).collect(Collectors.toList());
-            
-            System.out.println(relationWithSensor.size());
 
             if(relationWithSensor.size() == 1) {
                 Emergency fire = relationWithSensor.get(0);

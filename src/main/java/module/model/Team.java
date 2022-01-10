@@ -53,6 +53,7 @@ public class Team {
                 ", level='" + this.level + "\'" +
                 ", radius='" + radius + "\'" +
                 ", emergencyId='" + emergencyId + "\'" +
+                ", isHandling='" + isHandling + "\'" +
                 "}\n";
     }
 }
