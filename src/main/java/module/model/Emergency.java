@@ -55,6 +55,7 @@ public class Emergency {
                 "id_emergency=" + id_emergency +
                 ", location=" + this.location +
                 ", intensity=" + this.intensity +
+                ", isHandled=" + this.isHandled +
                 '}';
     }
 
