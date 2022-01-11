@@ -60,11 +60,14 @@ public class Main {
 
         System.out.println("Simulator started !");
 
+        Integer i = 0;
+
         // Boucle infinie de simulation
         while(true) {
             int delayBetweenTwoEmergencies = 30000 + (int)(Math.random() * ((45000 - 30000) + 1));
             Emergency emergency = sim.initEmergency();
             if (emergency != null) {
+                i++;
                 // TODO Remove inproduction
                 apiEmergency.sensor.createOrUpdate(emergency.getSensors());
 
@@ -74,7 +77,10 @@ public class Main {
                 }
                 api.sensor.createOrUpdate(emergency.getSensors());
 
-                break;
+
+                if(i >= 2) {
+                    break;
+                }
             }
             // System.out.println("Attente de " + delayBetweenTwoEmergencies / 1000 + " secondes");
             // sleep(delayBetweenTwoEmergencies);

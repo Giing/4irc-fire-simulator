@@ -169,6 +169,10 @@ public class Simulator extends Subscriber {
     @Override
     public  void onUpdateEmergencies(List<Emergency> newEmergencies) {
         for (Emergency emergency : newEmergencies) {
+            Emergency oldEmergency = emergencies.get(emergency.getId());
+            if(oldEmergency != null) {
+                emergency.isHandled = oldEmergency.isHandled;
+            }
             emergency.setSensors(this.api.sensor.getAllByEmergency(emergency.getId()));
             emergencies.put(emergency.getId(), emergency);
         }
@@ -189,7 +193,7 @@ public class Simulator extends Subscriber {
             Map<String, Emergency> emergencies = this.emergencies;
             
             if(emergencyHandledByTeam != null && !emergencyHandledByTeam.isHandled) {
-                System.out.println("Launch task");
+                System.out.println("Launch task for: " + emergencyHandledByTeam);
                 emergencyHandledByTeam.isHandled = true;
                 new Timer().scheduleAtFixedRate(new TimerTask(){
                     @Override
@@ -205,6 +209,7 @@ public class Simulator extends Subscriber {
                         for (Sensor sensor : emergencyHandledByTeam.getSensors()) {
                             sensor.setEmergencyId(null);
                             apiEmergency.sensor.createOrUpdate(Arrays.asList(sensor));
+                            sensor.setEmergencyId(emergencyHandledByTeam.getId());
                         }
                         
                         System.out.println(emergencyHandledByTeam);
