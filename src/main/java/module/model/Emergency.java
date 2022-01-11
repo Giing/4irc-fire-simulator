@@ -109,6 +109,11 @@ public class Emergency {
         for (Sensor sensor : sensors) {
             if(this.intensity < sensor.getIntensity()) this.intensity = sensor.getIntensity();
         }
+        // Sensor sensor = sensors.get(0);
+        // double distance = Math.pow((this.location.getLatitude() - sensor.getLocation().getLatitude()), 2) + Math.pow((this.location.getLongitude() - sensor.getLocation().getLongitude()), 2);
+        // double sensorRadius = Math.pow(sensor.getRadius(), 2);
+        // // Calcul de l'intensité en fonction de la distance entre le centre du feu et le centre du sensor
+        // this.intensity = (int)Math.ceil(sensor.getIntensity() * sensorRadius / (sensorRadius - distance) );
     }
 
     public void updateIntensity() {

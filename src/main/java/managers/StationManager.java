@@ -24,6 +24,8 @@ public class StationManager extends Subscriber {
     private List<Station> stations;
     private List<Emergency> unhandledEmergencies;
 
+    final private int timeInterval = 100;
+
     public StationManager(Api api, Map mapApi) {
         this.api = api;
         this.mapApi = mapApi;
@@ -130,7 +132,7 @@ public class StationManager extends Subscriber {
                         return;
                     }
                 }
-            }, 0, 1000);
+            }, 0, timeInterval);
         }
     }
 
@@ -167,7 +169,7 @@ public class StationManager extends Subscriber {
                         return;
                     }
                 }
-            }, 0, 1000);
+            }, 0, timeInterval);
         }
     }
 }
