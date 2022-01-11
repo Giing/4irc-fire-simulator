@@ -22,7 +22,7 @@ public class Simulator extends Subscriber {
     private final double latitude_step    = 0.06 / 6.0;
     private List<Sensor> sensors = new ArrayList<>();
 
-    private Map<String, Emergency> emergencies = new HashMap<String, Emergency>();
+    public Map<String, Emergency> emergencies = new HashMap<String, Emergency>();
 
     public Collection<Emergency> getEmergencies() {
         return emergencies.values();
@@ -64,23 +64,23 @@ public class Simulator extends Subscriber {
         return this.sensors;
     }
 
+    public int getNumberOfEmergency() {
+        return this.emergencies.size();
+    }
+
     public Simulator(List<Sensor> sensors, Api api, Api apiEmergency) {
         this.sensors = sensors;
         this.api = api;
         this.apiEmergency = apiEmergency;
     }
 
-    @Deprecated
-    public Simulator initializeSimulation() {
+    public void init() {
+        this.ensureInitOneEmergency();
+        this.ensureInitOneEmergency();
+    }
 
-        int id = 0;
-        for (double i = 0; i < 10; i++) {
-            for (double j = 0; j < 6; j++) {
-                this.sensors.add(new Sensor(String.valueOf(id), new Coord((j * this.latitude_step) + this.latitude_min, (i * this.longitude_step) + this.longitude_min), 0));
-                id++;
-            }
-        }
-        return this;
+    public void ensureInitOneEmergency() {
+        while(this.initEmergency() == null);
     }
 
     public Emergency initEmergency() {
@@ -97,6 +97,7 @@ public class Simulator extends Subscriber {
             // Calcul de l'intensité en fonction de la distance entre le centre du feu et le centre du sensor
             int intensity = (int)Math.ceil((sensorRadius - distance) * 100 / sensorRadius);
             if (distance < sensorRadius) {
+                if(sensor.getEmergencyId() != null) return null;
                 sensor.setIntensity(intensity);
                 fireSensors.add(sensor);
             }
@@ -105,8 +106,16 @@ public class Simulator extends Subscriber {
         Emergency emergency = new Emergency(java.util.UUID.randomUUID().toString(), new Coord(fireLat, fireLong), fireSensors, 100);
         if (canDeclareEmergency(emergency)) {
             System.out.println("Nouveau feu créé : " + emergency.toJSON() + "\n" + emergency.getSensors());
-            // for (Sensor s : emergency.getSensors())
-            //     s.setEmergencyId(String.valueOf(emergency.getId()));
+
+            // TODO Remove inproduction
+            this.apiEmergency.sensor.createOrUpdate(emergency.getSensors());
+                        
+            this.api.emergency.createOrUpdate(Arrays.asList(emergency));
+            for (Sensor sensor : emergency.getSensors()) {
+                sensor.setEmergencyId(emergency.getId());
+            }
+            this.api.sensor.createOrUpdate(emergency.getSensors());
+
             this.addEmergency(emergency);
             return emergency;
         } else
@@ -162,8 +171,7 @@ public class Simulator extends Subscriber {
             }
         }
         //super.onUpdateSensors(sensors);
-        // System.out.println(this);
-        // System.out.println("MàJ des sensors " + sensors.toString());
+        System.out.println("MàJ des sensors " + sensors.toString());
     }
 
     @Override
@@ -175,6 +183,13 @@ public class Simulator extends Subscriber {
             }
             emergency.setSensors(this.api.sensor.getAllByEmergency(emergency.getId()));
             emergencies.put(emergency.getId(), emergency);
+            if(emergency.getIntensity() == 0) {
+                this.emergencies.remove(emergency.getId());
+                for (Sensor sensor : emergency.getSensors()) {
+                    Sensor reset = this.getOneSensor(sensor.getId());
+                    reset.setEmergencyId(null);
+                }
+            }
         }
     }
 
@@ -217,6 +232,9 @@ public class Simulator extends Subscriber {
                         
 
                         if(emergencyHandledByTeam.getIntensity() == 0) {
+                            for (Sensor sensor :  emergencyHandledByTeam.getSensors()) {
+                                sensor.setEmergencyId(null);
+                            }
                             System.out.println("Delete: " + emergencyHandledByTeam.getId());
                             emergencies.remove(emergencyHandledByTeam.getId());
                             api.emergency.delete(emergencyHandledByTeam);

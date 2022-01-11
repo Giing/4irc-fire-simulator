@@ -25,6 +25,11 @@ public class Main {
         System.out.println("==================================");
         System.out.println("|| Bienvenue dans le simulateur ||");
         System.out.println("==================================");
+
+        int maxEmergency = 2;
+        int avgTimeBetweenGeneration = 10000;
+        int intervalTimeBetweenGeneration = 2000;
+
         PropertiesReader prop = new PropertiesReader();
 
         Api api = new Api(prop.getProp().getProperty("SIMULATOR_BASE_URL"), prop.getProp().getProperty("SIMULATOR_API_KEY"));
@@ -60,31 +65,7 @@ public class Main {
 
         System.out.println("Simulator started !");
 
-        Integer i = 0;
-
-        // Boucle infinie de simulation
-        while(true) {
-            int delayBetweenTwoEmergencies = 30000 + (int)(Math.random() * ((45000 - 30000) + 1));
-            Emergency emergency = sim.initEmergency();
-            if (emergency != null) {
-                i++;
-                // TODO Remove inproduction
-                apiEmergency.sensor.createOrUpdate(emergency.getSensors());
-
-                api.emergency.createOrUpdate(Arrays.asList(emergency));
-                for (Sensor sensor : emergency.getSensors()) {
-                    sensor.setEmergencyId(emergency.getId());
-                }
-                api.sensor.createOrUpdate(emergency.getSensors());
-
-
-                if(i >= 2) {
-                    break;
-                }
-            }
-            // System.out.println("Attente de " + delayBetweenTwoEmergencies / 1000 + " secondes");
-            // sleep(delayBetweenTwoEmergencies);
-        }
+        sim.init();
 
         /*sleep(500);
         response = example.post("http://localhost:3000/api/sensors/", sensorToPost.toJSON());
