@@ -1,6 +1,7 @@
 package module.model;
 
 import java.util.List;
+import java.util.Timer;
 
 import com.google.gson.JsonDeserializer;
 
@@ -9,6 +10,8 @@ public class Emergency {
     private Coord location;
     private int intensity;
     private List<Sensor> sensors;
+
+    public Boolean isHandled = false;
 
     public static JsonDeserializer<Emergency> jsonAdapter = new EmergencyAdapter();
 
@@ -25,7 +28,11 @@ public class Emergency {
 
     public String getId() { return this.id_emergency; }
     public int getIntensity() { return this.intensity; }
-    public void setIntensity(int intensity) { this.intensity = intensity; }
+    public void setIntensity(int intensity) {
+        if(intensity < 0) intensity = 0;
+        else if(intensity > 100) intensity = 100;
+        this.intensity = intensity; 
+    }
     public Coord getLocation() { return this.location; }
 
     public void setLocation(Coord position) {
@@ -47,7 +54,8 @@ public class Emergency {
         return "Fire{" +
                 "id_emergency=" + id_emergency +
                 ", location=" + this.location +
-                "), sensors=\n" + sensors +
+                ", intensity=" + this.intensity +
+                ", isHandled=" + this.isHandled +
                 '}';
     }
 
@@ -96,6 +104,28 @@ public class Emergency {
         this.location = location;
         this.intensity = intensity;
     }
+
+    public void computeIntensityFromSensors(List<Sensor> sensors) {
+        this.intensity = 0;
+        for (Sensor sensor : sensors) {
+            if(this.intensity < sensor.getIntensity()) this.intensity = sensor.getIntensity();
+        }
+        // Sensor sensor = sensors.get(0);
+        // double distance = Math.pow((this.location.getLatitude() - sensor.getLocation().getLatitude()), 2) + Math.pow((this.location.getLongitude() - sensor.getLocation().getLongitude()), 2);
+        // double sensorRadius = Math.pow(sensor.getRadius(), 2);
+        // // Calcul de l'intensité en fonction de la distance entre le centre du feu et le centre du sensor
+        // this.intensity = (int)Math.ceil(sensor.getIntensity() * sensorRadius / (sensorRadius - distance) );
+    }
+
+    public void updateIntensity() {
+        for (Sensor sensor : sensors) {
+            double distance = this.getLocation().getDistance(sensor.getLocation());
+            int intensitySensor = (int)Math.ceil((sensor.getRadius() - distance) * this.getIntensity() / sensor.getRadius());
+            if (distance < sensor.getRadius()) {
+                sensor.setIntensity(intensitySensor);
+            }
+        }
+    } 
 
     @Override
     public boolean equals(Object obj) {

@@ -18,7 +18,8 @@ public class EmergencyAdapter implements JsonDeserializer<Emergency>, JsonSerial
         return new Emergency(
             jsonObject.get("id").getAsString(),
             coord,
-            new ArrayList<Sensor>()
+            new ArrayList<Sensor>(),
+            jsonObject.get("intensity").getAsInt()
         );
     }
 

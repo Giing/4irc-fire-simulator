@@ -7,14 +7,13 @@ app/Main.class
 org/example/App.class
 module/socket/WebSocket$1.class
 module/model/SensorAdapter.class
-module/json/JsonMapper.class
 managers/Main.class
+module/json/JsonMapper.class
 module/api/services/EmergencyService.class
 module/socket/Subscriber.class
-app/Manager.class
 module/model/Coord.class
-module/socket/Events.class
 app/Simulator.class
+module/socket/Events.class
 module/socket/WebSocket.class
 module/model/Station.class
 managers/FireManager.class

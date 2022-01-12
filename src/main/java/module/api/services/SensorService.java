@@ -40,4 +40,26 @@ public class SensorService extends ApiService{
             return new ArrayList<Sensor>();
         }
     }
+
+    public List<Sensor> getAllByEmergency(String emergencyId) {
+        try {
+            String result = this.client.get("/emergencies/" + emergencyId + "/sensors");
+            return this.mapper.sensor.fromJson(new JSONArray(result));
+        } catch (JSONException | IOException e) {
+            // TODO Auto-generated catch block
+            // e.printStackTrace();
+            return new ArrayList<Sensor>();
+        }
+    }
+
+    public Sensor reset(String id) {
+        try {
+            String result = this.client.get("/sensors/reset/" + id);
+            return this.mapper.sensor.fromJson(new JSONArray("[" + result + "]")).get(0);
+        } catch (JSONException | IOException e) {
+            // TODO Auto-generated catch block
+            // e.printStackTrace();
+            return null;
+        }
+    }
 }

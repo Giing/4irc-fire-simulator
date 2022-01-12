@@ -20,7 +20,7 @@ import java.util.List;
 import org.json.JSONArray;
 
 public class WebSocket {
-    private String[] EVENTS = {"onUpdateSensors", "onUpdateEmergencies", "onUpdateTeams", "onUpdateStations"};
+    private String[] EVENTS = {"onUpdateSensors", "onUpdateEmergencies", "onDeleteEmergencies", "onUpdateTeams", "onUpdateStations"};
 
     private String URL;
     private String WS_KEY;
@@ -51,7 +51,7 @@ public class WebSocket {
 
     public void subscribe(Subscriber subscriber, String eventToSubscribe) {
 
-        if(eventToSubscribe == null) {
+        if(eventToSubscribe != null) {
             subscribeToEvent(subscriber, eventToSubscribe);
         } else {
             for (String event : EVENTS) {
@@ -66,22 +66,27 @@ public class WebSocket {
         socket.on(event, new Listener() {
             @Override
             public void call(Object... args) {
-                System.out.println("Hello from api !");
+                // System.out.println("Hello from api !");
                 JSONArray content = (JSONArray)args[0];
 
 
                 switch(event) {
                     case "onUpdateSensors":
-                        System.out.println(mapper.sensor.fromJson(content));
+                        // System.out.println(mapper.sensor.fromJson(content));
                         subscriber.onUpdateSensors(mapper.sensor.fromJson(content));
                         break;
                     case "onUpdateEmergencies":
                         subscriber.onUpdateEmergencies(mapper.emergency.fromJson(content));
                         break;
-                    // case "onUpdateStations":
-                    //     Type typeStations = new TypeToken<List<Station>>(){}.getType();
-                    //     subscriber.onUpdateStations(gson.fromJson(content.toString(), typeStations));
-                    //     break;
+                    case "onDeleteEmergencies":
+                        subscriber.onUpdateEmergencies(mapper.emergency.fromJson(content));
+                        break;
+                    case "onUpdateStations":
+                        subscriber.onUpdateStations(mapper.station.fromJson(content));
+                        break;
+                    case "onUpdateTeams":
+                        subscriber.onUpdateTeams(mapper.team.fromJson(content));
+                        break;
                 }
             }
         });
