@@ -133,7 +133,7 @@
             <manifest>
               <addClasspath>true</addClasspath>
               <classpathPrefix>lib/</classpathPrefix>
-              <mainClass>app.Main</mainClass>
+              <mainClass>managers.Main</mainClass>
             </manifest>
           </archive>
         </configuration>
