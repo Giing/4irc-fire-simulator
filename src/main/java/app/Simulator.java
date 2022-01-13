@@ -108,7 +108,7 @@ public class Simulator extends Subscriber {
             System.out.println("Nouveau feu créé : " + emergency.toJSON() + "\n" + emergency.getSensors());
 
             // TODO Remove inproduction
-            this.apiEmergency.sensor.createOrUpdate(emergency.getSensors());
+            // this.apiEmergency.sensor.createOrUpdate(emergency.getSensors());
                         
             this.api.emergency.createOrUpdate(Arrays.asList(emergency));
             for (Sensor sensor : emergency.getSensors()) {
@@ -189,6 +189,7 @@ public class Simulator extends Subscriber {
                     Sensor reset = this.getOneSensor(sensor.getId());
                     reset.setEmergencyId(null);
                 }
+                this.ensureInitOneEmergency();
             }
         }
     }
@@ -204,7 +205,7 @@ public class Simulator extends Subscriber {
                 .orElse(null);
 
             Api api = this.api;
-            Api apiEmergency = this.apiEmergency;
+            // Api apiEmergency = this.apiEmergency;
             Map<String, Emergency> emergencies = this.emergencies;
             
             if(emergencyHandledByTeam != null && !emergencyHandledByTeam.isHandled) {
@@ -221,11 +222,11 @@ public class Simulator extends Subscriber {
                         api.sensor.createOrUpdate(emergencyHandledByTeam.getSensors());
                         
                         // TODO Remove in production
-                        for (Sensor sensor : emergencyHandledByTeam.getSensors()) {
-                            sensor.setEmergencyId(null);
-                            apiEmergency.sensor.createOrUpdate(Arrays.asList(sensor));
-                            sensor.setEmergencyId(emergencyHandledByTeam.getId());
-                        }
+                        // for (Sensor sensor : emergencyHandledByTeam.getSensors()) {
+                        //     sensor.setEmergencyId(null);
+                        //     apiEmergency.sensor.createOrUpdate(Arrays.asList(sensor));
+                        //     sensor.setEmergencyId(emergencyHandledByTeam.getId());
+                        // }
                         
                         System.out.println(emergencyHandledByTeam);
                         System.out.println(emergencyHandledByTeam.getSensors());
